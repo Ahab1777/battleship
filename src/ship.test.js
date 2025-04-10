@@ -1,9 +1,11 @@
 import Ship from "./ship";
 
 describe('Submarine(length = 3) sinks after 3 hits', () => {
-    //beforeAll(() => {
-        const submarine = new Ship(3) 
-    //})
+    let submarine;
+
+    beforeEach(() => {
+        submarine = new Ship(3) 
+    })
 
     test('Sink submarine', () => {
         submarine.hit()

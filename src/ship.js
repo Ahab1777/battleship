@@ -23,4 +23,8 @@ export default class Ship{
     get hitCount() {
         return this._hits
     }
+
+    get shipSize() {
+        return this._length
+    }
 }
