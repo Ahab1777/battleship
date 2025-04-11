@@ -1,10 +1,6 @@
 import Gameboard, {Square} from "./gameboard"
 import Ship from "./ship"
 
-
-
-
-
 describe('Square class tests', () => {
     let square;
     let destroyer;
