@@ -12,6 +12,7 @@ describe('Submarine(length = 3) sinks after 3 hits', () => {
         expect(submarine.hitCount).toBe(1)
         submarine.hit()
         expect(submarine.hitCount).toBe(2)
+        expect(submarine.sunkStatus).toBe(false)
         submarine.hit()
         expect(submarine.sunkStatus).toBe(true)
     })
