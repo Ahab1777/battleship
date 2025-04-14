@@ -1,5 +1,8 @@
 import Ship from "./ship";
-
+//Gameboard is about states
+    //ship placement
+    //tracking square status (hit or miss)
+    //validating moves
 export default class Gameboard{
     constructor(squareGenerator = () => new Square()){
         this._board = this.#generateBoard();
