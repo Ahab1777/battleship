@@ -1,3 +1,8 @@
+:root {
+    --square-side: 40px;
+    
+}
+
 *{
     margin: 0;
     padding: 0;
@@ -12,10 +17,11 @@
     color: white;
 }
 
-.main-container{
+.main-container, .enemy-container{
     display: grid;
-    grid-template-columns: repeat(11, 50px);
-    grid-template-rows: repeat(11, 50px);
+    grid-template-columns: repeat(11, var(--square-side));
+    grid-template-rows: repeat(11, var(--square-side));
+    margin: 20px;
 }
 
 .columns-container{
@@ -26,8 +32,8 @@
 }
 
 .column {
-    width: 50px;
-    height: 50px;
+    width: var(--square-side);
+    height: var(--square-side);
     border: 1px solid red;
     display: flex;
     justify-content: center;
@@ -46,8 +52,8 @@
 }
 
 .row {
-    width: 50px;
-    height: 50px;
+    width: var(--square-side);
+    height: var(--square-side);
     border: 1px solid blue;
     display: flex;
     justify-content: center;
@@ -59,15 +65,15 @@
 .board{
     grid-area: 2 / 2 / 12 / 12;
     display: grid;
-    grid-template-columns: repeat(10, 50px);
-    grid-template-rows: repeat(10, 50px);
+    grid-template-columns: repeat(10, var(--square-side));
+    grid-template-rows: repeat(10, var(--square-side));
     grid-auto-flow: column;
 }
 
 
 .square{
-    width: 50px;
-    height: 50px;
+    width: var(--square-side);
+    height: var(--square-side);
     border: 1px solid black;
     display: flex;
     justify-content: center;
