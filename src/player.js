@@ -3,6 +3,12 @@ import Gameboard from "./gameboard";
     //attack logic
     //turn handling
     //wincon check
+
+
+//Refactoring
+    //pass fleet to Player
+    //
+
 export default class Player{
     constructor(player, gameboard){
         this._gameboard = gameboard;
