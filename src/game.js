@@ -16,15 +16,16 @@ import Ship from "./ship";
 
 export default class Game{
     constructor() {
-        this._player = new Player;
-        this._computer = new Player;
-        this.attackingPlayer = this._player;
-        this.defendingPlayer = this._computer;
+        this.humanPlayer = new Player('player');
+        this.computerPlayer = new Player('computer');
+        this.attackingPlayer = this.humanPlayer;
+        this.defendingPlayer = this.computerPlayer;
     }
 
     togglePlayers(){
-        this.attackingPlayer = this.attackingPlayer === this._player ? this._computer : this._player;
+        this.attackingPlayer = this.attackingPlayer === this.humanPlayer ? this.computerPlayer : this.humanPlayer;
 
+        this.defendingPlayer = this.defendingPlayer === this.humanPlayer ? this.computerPlayer : this.humanPlayer;
     }
 
     positionShips(){
@@ -54,13 +55,15 @@ export default class Game{
 
         //place ships in board
         //TODO place them randomly
-        this._player.placeShip(new Ship(3), 'A1', 'C1')
-        this._computer.placeShip(new Ship(3), 'A2', 'C2')
+        this.humanPlayer.placeShip(new Ship(3), 'A1', 'C1')
+        this.computerPlayer.placeShip(new Ship(3), 'A2', 'C2')
     }
 
     runTurn(targetCoordinate){
-        this.defendingPlayer.receiveAttack(targetCoordinate)
-        
+        this.defendingPlayer.gameboard.receiveAttack(targetCoordinate)
+        if (this.defendingPlayer.gameboard.isFleetSunk()) {
+            alert(`${this.attackingPlayer.name} has won`)
+        }
     }
 
 

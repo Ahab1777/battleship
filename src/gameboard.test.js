@@ -34,11 +34,11 @@ describe('Isolated gameboard functions test', () => {
         gameboard = new Gameboard
     })
 
-    test('convertCoordinateToArrayPosition works', () => {
-        expect(gameboard.convertCoordinateToArrayPosition('A1')).toEqual([0,0])
-        expect(gameboard.convertCoordinateToArrayPosition('J3')).toEqual([9,2])
-        expect(gameboard.convertCoordinateToArrayPosition('F10')).toEqual([5,9])
-        expect(gameboard.convertCoordinateToArrayPosition('C6')).toEqual([2,5])
+    test('convertStringCoordinateToArrayPosition works', () => {
+        expect(gameboard.convertStringCoordinateToArrayPosition('A1')).toEqual([0,0])
+        expect(gameboard.convertStringCoordinateToArrayPosition('J3')).toEqual([9,2])
+        expect(gameboard.convertStringCoordinateToArrayPosition('F10')).toEqual([5,9])
+        expect(gameboard.convertStringCoordinateToArrayPosition('C6')).toEqual([2,5])
     })
 
     test('receiveAttack', () => {

@@ -1,5 +1,27 @@
 import Gameboard from "./gameboard";
+import Game from "./game";
 
-export default updateDOM(){
+//render board
+
+export default updateDOM(player){
+    //TODO - Enemy fleet remaining 
+    //render board
+    const squareNodeList = document.querySelectorAll(`.${player.name}-container .square`);
     
+    squareNodeList.forEach(square => {
+        const position = square.getAttribute('data-pos');
+        const [row, col] = player.gameboard.convertStringCoordinateToArrayPosition(position)
+
+        const boardSquare = player.gameboard._board[row][col]
+
+        //Square logic
+        //1 - is hit - missed
+        if (boardSquare.hitStatus && !boardSquare.ship) {
+            square.classList.add('miss')
+        }
+        //2 - is hit - ship hit
+        if (boardSquare.hitStatus && boardSquare.ship) {
+            square.classList.add('hit')
+        }
+    })
 }
