@@ -1,8 +1,5 @@
 import Ship from "./ship";
-//Gameboard is about states
-    //ship placement
-    //tracking square status (hit or miss)
-    //validating moves
+
 export default class Gameboard{
     constructor(squareGenerator = () => new Square()){
         this._board = this.#generateBoard();
@@ -16,7 +13,7 @@ export default class Gameboard{
             .map(() => Array(10).fill().map(() => new Square()));
     }
 
-    convertCoordinateToArrayPosition(rowColumnString){
+    convertStringCoordinateToArrayPosition(rowColumnString){
         const rowString = rowColumnString[0]
         const row = rowString.charCodeAt(0);
         const column = parseInt(rowColumnString.slice(1), 10);
@@ -29,7 +26,7 @@ export default class Gameboard{
 
     
     receiveAttack(coordinate){
-        const position = this.convertCoordinateToArrayPosition(coordinate)
+        const position = this.convertStringCoordinateToArrayPosition(coordinate)
         this._board[position[0]][position[1]].squareHit()
     }
     
@@ -38,19 +35,19 @@ export default class Gameboard{
     }
 
     squareHitStatus(coordinate){
-        const position = this.convertCoordinateToArrayPosition(coordinate)
+        const position = this.convertStringCoordinateToArrayPosition(coordinate)
         return this._board[position[0]][position[1]].hitStatus
     }
     
     getSquareShip(coordinate){
-        const position = this.convertCoordinateToArrayPosition(coordinate)
+        const position = this.convertStringCoordinateToArrayPosition(coordinate)
         return this._board[position[0]][position[1]].ship
     }
     
     placeShip(ship, startCoordinate, endCoordinate){
         const size = ship.shipSize;
-        const startPosition = this.convertCoordinateToArrayPosition(startCoordinate)
-        const endPosition = this.convertCoordinateToArrayPosition(endCoordinate)
+        const startPosition = this.convertStringCoordinateToArrayPosition(startCoordinate)
+        const endPosition = this.convertStringCoordinateToArrayPosition(endCoordinate)
         //populate board in correct direction until ship length size
         if (startPosition[0] != endPosition[0]) { //if X axis changes, ship is horizontal
             const xAxis = startPosition[0]
