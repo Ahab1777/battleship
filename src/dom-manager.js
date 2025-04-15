@@ -1,5 +1,5 @@
-import Gameboard from "./gameboard";
-import Game from "./game";
+import Gameboard from "./gameboard.js";
+import Game from "./game.js";
 
 //render board
 

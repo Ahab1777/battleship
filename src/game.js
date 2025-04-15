@@ -64,25 +64,6 @@ export default class Game{
     }
 
 
-    //human plays
-        //render grid - dom-manager.js X
-        //click square - main.js
-        //grab data-pos - main.js
-        //make attack - game.js X
-        //check if fleet sunk - gameboard.js X
-            //restart game - 
-        //re-render grid - dom-manager.js X
-        //toggle player - game.js X
-        //re-render game status - gameboard.js
-    //computer plays
-        //make random attack - game.js X
-        //check if fleet sunk - gameboard.js X
-            //restart game
-        //re-render grid - dom-manager.js X
-        //toggle player - game.js X
-        //re-render game status - dom-manager.js X
-
-
 
     makeAttack(targetCoordinate){
         //check if fleet sunk
