@@ -45,7 +45,7 @@ export default class Game{
         //place ships in board
         //TODO place them randomly
         this.humanPlayer.gameboard.placeShip(new Ship(3), 'A1', 'C1')
-        this.computerPlayer.gameboard.placeShip(new Ship(3), 'A2', 'C2')
+        this.computerPlayer.gameboard.placeShip(new Ship(3), 'A1', 'C1')
     }
 
     runTurn(){
@@ -55,21 +55,20 @@ export default class Game{
 
 
     makeAttack(targetCoordinate){
-        //check if fleet sunk
-        //toggle current player
-        //re-render grid that was just attacked
-
-
         let coordinate = targetCoordinate
         //if computer is playing, roll random coordinate,else player chooses coordinate
         if (this.attackingPlayer === this.computerPlayer) {
             coordinate = this.randomAttack()
             this.defendingPlayer.gameboard.receiveAttack(coordinate)
-            return
         }
-        this.defendingPlayer.gameboard.receiveAttack(coordinate)
+        if (this.attackingPlayer === this.humanPlayer){
+            this.defendingPlayer.gameboard.receiveAttack(coordinate)
+            this.defendingPlayer.gameboard.getSquareShip(coordinate)//returning null
+            // this.defendingPlayer.gameboard._fleet[0].hit()//testing
+        }
         if (this.defendingPlayer.gameboard.isFleetSunk()) {
-            alert(`${this.attackingPlayer.name} has won`)
+            //alert(`${this.attackingPlayer.name} has won`)
+            console.log(`${this.attackingPlayer.name} won!`)
             //TODO restart game logic
         }
     }

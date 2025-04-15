@@ -47,6 +47,12 @@ describe('Isolated gameboard functions test', () => {
         expect(gameboard.squareHitStatus('B9')).toBe(false)
         gameboard.receiveAttack('B9')
         expect(gameboard.squareHitStatus('B9')).toBe(true)
+        expect(gameboard.getSquareShip('B9').hitCount).toBe(1)
+        gameboard.receiveAttack('B8')
+        expect(gameboard.getSquareShip('B9').hitCount).toBe(2)
+        gameboard.receiveAttack('B10')
+        expect(submarine.sunkStatus).toBe(true)
+
     })
 
     test('ship gets sunk', () => {
@@ -68,15 +74,31 @@ describe('Isolated gameboard functions test', () => {
     test('is fleet sunk?', () => {
         const destroyer = new Ship(3)
         gameboard.placeShip(destroyer, 'F8', 'F10')
+        expect(gameboard.isFleetSunk()).toBe(false)
         expect(gameboard._fleet[0]).toBe(destroyer)
         gameboard.receiveAttack('F8')
+        expect(destroyer.hitCount).toBe(1)
         gameboard.receiveAttack('F9')
+        expect(destroyer.hitCount).toBe(2)
         gameboard.receiveAttack('F10')
         expect(gameboard.squareHitStatus('F8')).toBe(true)
         expect(gameboard.squareHitStatus('F9')).toBe(true)
         expect(gameboard._fleet.length).toBe(1)
         expect(gameboard._fleet[0]._length).toBe(gameboard._fleet[0]._hits)
         expect(gameboard.isFleetSunk()).toBe(true)
+    })
+
+    test('Fleet grows as ships are added', () => {
+        expect(gameboard._fleet.length).toBe(0)
+        const destroyer = new Ship(3)
+        gameboard.placeShip(destroyer, 'C1','C3')
+        expect(gameboard._fleet.length).toBe(1)
+        const submarine = new Ship(3)
+        gameboard.placeShip(submarine, 'J1','J3')
+        expect(gameboard._fleet.length).toBe(2)
+        
+        
+
     })
 })
 

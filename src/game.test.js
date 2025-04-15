@@ -1,6 +1,6 @@
 import Game from "./game";
 import Player from "./player";
-
+import Ship from "./ship";
 
 
 describe('Game controls', () => {
@@ -29,15 +29,23 @@ describe('Game controls', () => {
 
     test('check if fleet correctly set', () => {
         expect(match.humanPlayer.gameboard._fleet.length).toBe(1)
-        match.
+        match.humanPlayer.gameboard.placeShip(new Ship(2), 'B2', 'B3')
+        expect(match.humanPlayer.gameboard._fleet.length).toBe(2)
 
     })
 
     test('player attacks computer', () => {
-        expect(match.humanPlayer.gameboard._fleet.length).toBe(1)
-        expect(match.)
+        expect(match.computerPlayer.gameboard._fleet.length).toBe(1)
+        expect(match.computerPlayer.gameboard._fleet[0]).toBeInstanceOf(Ship)
+        expect(match.computerPlayer.gameboard._fleet[0].hitCount).toBe(0)
+        expect(match.computerPlayer.name).toBe('computer')
+        expect(match.humanPlayer.name).toBe('human')
+        expect(match.attackingPlayer).toBeInstanceOf(Player)
         match.makeAttack('A1')
+        console.log(match.computerPlayer.gameboard._fleet)
+        expect(match.computerPlayer.gameboard._fleet[0].hitCount).toBe(1)
         match.makeAttack('B1')
+        expect(match.computerPlayer.gameboard._fleet[0].hitCount).toBe(2)
         match.makeAttack('C1')
         expect(match.computerPlayer.gameboard.isFleetSunk()).toBe(true)
 

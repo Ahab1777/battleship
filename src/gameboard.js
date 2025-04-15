@@ -26,8 +26,9 @@ export default class Gameboard{
 
     
     receiveAttack(coordinate){
-        const position = this.convertStringCoordinateToArrayPosition(coordinate)
-        this._board[position[0]][position[1]].squareHit()
+        const [row, col] = this.convertStringCoordinateToArrayPosition(coordinate)
+        const square = this._board[row][col]
+        square.squareHit()
     }
     
     isFleetSunk() {

@@ -14,6 +14,7 @@ export default class Ship{
         if (this._hits >= this._length) {
             this._sunken = true;
         }
+        
     }
 
     get sunkStatus() {
