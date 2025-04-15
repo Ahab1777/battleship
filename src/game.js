@@ -64,6 +64,8 @@ export default class Game{
         //if computer is playing, roll random coordinate,else player chooses coordinate
         if (this.attackingPlayer === this.computerPlayer) {
             coordinate = this.randomAttack()
+            this.defendingPlayer.gameboard.receiveAttack(coordinate)
+            return
         }
         this.defendingPlayer.gameboard.receiveAttack(coordinate)
         if (this.defendingPlayer.gameboard.isFleetSunk()) {

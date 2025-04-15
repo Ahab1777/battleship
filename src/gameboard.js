@@ -72,7 +72,7 @@ export default class Gameboard{
 export class Square{
     constructor(){
         this._hasBeenHit = false
-        this._ship = false
+        this._ship = null
     }
     
     set ship(ship){
