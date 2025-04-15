@@ -77,15 +77,19 @@
     height: var(--square-side);
     border: 1px solid black;
     display: flex;
-    background-color: royalblue;
+    background-color: gainsboro;
     justify-content: center;
     align-items: center;
 }
 
 .miss {
-    background-color: gray;
+    background-color: royalblue;
 }
 
 .hit {
     background-color: red;
+}
+
+.sunk {
+    background-color: darkred;
 }

@@ -1,41 +1,24 @@
 import Player from "./player.js";
 import Gameboard from "./gameboard.js";
 import Game from "./game.js";
-import { renderGrid, updateGameStatus } from "./dom-manager.js";
+import { renderGrid } from "./dom-manager.js";
 
 
 const player = new Player('player')
 const computer = new Player('computer')
 
 const match = new Game(player, computer)
+match.positionShips()
+match.makeAttack('A1')
+match.makeAttack('B1')
+match.makeAttack('C1')
+console.log(player.gameboard)
+match.makeAttack('C8')
+renderGrid(player);
+renderGrid(computer);
 
-renderGrid(player)
-renderGrid(computer)
 
-const playerSquareNodeList = document.querySelectorAll(`.player-container .square`);
 
-playerSquareNodeList.forEach(square => {
-    const coordinate = square.getAttribute('data-pos')
-    square.addEventListener('click', () => {
-        match.makeAttack(coordinate)
-        if (match.defendingPlayer.gameboard.isFleetSunk()) {
-            //restart game logic
-            return
-        }
-        renderGrid(computer);
-        match.togglePlayers();
-        updateGameStatus(match.attackingPlayer)
-        match.makeAttack()
-        if (match.defendingPlayer.gameboard.isFleetSunk()) {
-            //restart game logic
-            return
-        }
-        renderGrid(player)
-        match.togglePlayers();
-        updateGameStatus(match.attackingPlayer)
-
-    })
-})
 
 
 //human plays

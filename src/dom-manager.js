@@ -24,17 +24,21 @@ export function renderGrid(player) {
         if (boardSquare.hitStatus && boardSquare.ship) {
             square.classList.add('hit')
         }
+        //3 - is hit - sunk
+        if (player.gameboard.getSquareShip(position).sunkStatus) {
+            square.classList.add('sunk')
+        }
         
 
 
     })
 }
 
-export function updateGameStatus(currentPlayer){
-    const statusDisplay = document.querySelector('.game-status')
+// export function updateGameStatus(currentPlayer){
+//     const statusDisplay = document.querySelector('.game-status')
 
-    statusDisplay.innerHTML = `
-    Current player: ${currentPlayer}
-    `
-}
+//     statusDisplay.innerHTML = `
+//     Current player: ${currentPlayer}
+//     `
+// }
 

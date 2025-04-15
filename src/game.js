@@ -1,17 +1,7 @@
-import Player from "./player";
-import Gameboard from "./gameboard";
-import Ship from "./ship";
-import { renderGrid, updateGameStatus } from "./dom-manager";
-
-//start new game
-
-//TODO position ships
-
-//check who's turn it is
-//select square
-//check if misses or not
-//check if opponent fleet is sunk
-//change player
+import Player from "./player.js";
+import Gameboard from "./gameboard.js";
+import Ship from "./ship.js";
+import { renderGrid } from "./dom-manager.js";
 
 export default class Game{
     constructor(humanPlayer, computerPlayer) {
@@ -25,7 +15,6 @@ export default class Game{
         this.attackingPlayer = this.attackingPlayer === this.humanPlayer ? this.computerPlayer : this.humanPlayer;
 
         this.defendingPlayer = this.defendingPlayer === this.humanPlayer ? this.computerPlayer : this.humanPlayer;
-        updateGameStatus(this.attackingPlayer)
     }
 
     positionShips(){
@@ -55,8 +44,8 @@ export default class Game{
 
         //place ships in board
         //TODO place them randomly
-        this.humanPlayer.placeShip(new Ship(3), 'A1', 'C1')
-        this.computerPlayer.placeShip(new Ship(3), 'A2', 'C2')
+        this.humanPlayer.gameboard.placeShip(new Ship(3), 'A1', 'C1')
+        this.computerPlayer.gameboard.placeShip(new Ship(3), 'A2', 'C2')
     }
 
     runTurn(){
