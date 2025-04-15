@@ -1,12 +1,11 @@
 import Player from "./player";
 import Gameboard from "./gameboard";
 import Ship from "./ship";
-
+import { renderGrid, updateGameStatus } from "./dom-manager";
 
 //start new game
 
-//create two players X
-//position ships
+//TODO position ships
 
 //check who's turn it is
 //select square
@@ -15,9 +14,9 @@ import Ship from "./ship";
 //change player
 
 export default class Game{
-    constructor() {
-        this.humanPlayer = new Player('player');
-        this.computerPlayer = new Player('computer');
+    constructor(humanPlayer, computerPlayer) {
+        this.humanPlayer = humanPlayer;
+        this.computerPlayer = computerPlayer;
         this.attackingPlayer = this.humanPlayer;
         this.defendingPlayer = this.computerPlayer;
     }
@@ -26,6 +25,7 @@ export default class Game{
         this.attackingPlayer = this.attackingPlayer === this.humanPlayer ? this.computerPlayer : this.humanPlayer;
 
         this.defendingPlayer = this.defendingPlayer === this.humanPlayer ? this.computerPlayer : this.humanPlayer;
+        updateGameStatus(this.attackingPlayer)
     }
 
     positionShips(){
@@ -59,13 +59,66 @@ export default class Game{
         this.computerPlayer.placeShip(new Ship(3), 'A2', 'C2')
     }
 
-    runTurn(targetCoordinate){
-        this.defendingPlayer.gameboard.receiveAttack(targetCoordinate)
+    runTurn(){
+
+    }
+
+
+    //human plays
+        //render grid - dom-manager.js X
+        //click square - main.js
+        //grab data-pos - main.js
+        //make attack - game.js X
+        //check if fleet sunk - gameboard.js X
+            //restart game - 
+        //re-render grid - dom-manager.js X
+        //toggle player - game.js X
+        //re-render game status - gameboard.js
+    //computer plays
+        //make random attack - game.js X
+        //check if fleet sunk - gameboard.js X
+            //restart game
+        //re-render grid - dom-manager.js X
+        //toggle player - game.js X
+        //re-render game status - dom-manager.js X
+
+
+
+    makeAttack(targetCoordinate){
+        //check if fleet sunk
+        //toggle current player
+        //re-render grid that was just attacked
+
+
+        let coordinate = targetCoordinate
+        //if computer is playing, roll random coordinate,else player chooses coordinate
+        if (this.attackingPlayer === this.computerPlayer) {
+            coordinate = this.randomAttack()
+        }
+        this.defendingPlayer.gameboard.receiveAttack(coordinate)
         if (this.defendingPlayer.gameboard.isFleetSunk()) {
             alert(`${this.attackingPlayer.name} has won`)
+            //TODO restart game logic
         }
     }
 
+    randomAttack(){
+        //roll random coordinate
+        const columns = 'ABCDEFGHIJ';
+        const rows = 10;
+
+        let randomCoordinate;
+        do {
+            const randomColumn = columns[Math.floor(Math.random() * columns.length)];
+            const randomRow = Math.floor(Math.random() * rows) + 1;
+            randomCoordinate = `${randomColumn}${randomRow}`;
+        } while (this.defendingPlayer.gameboard.squareHitStatus(randomCoordinate));
+        return randomCoordinate;
+    }
+
+    humanAttack(coordinate){
+
+    }
 
 
 }

@@ -7,6 +7,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    background-color: cadetblue;
 }
 
 .header{
@@ -17,7 +18,7 @@
     color: white;
 }
 
-.player-container, .computer-container{
+.human-container, .computer-container{
     display: grid;
     grid-template-columns: repeat(11, var(--square-side));
     grid-template-rows: repeat(11, var(--square-side));
@@ -76,7 +77,15 @@
     height: var(--square-side);
     border: 1px solid black;
     display: flex;
+    background-color: royalblue;
     justify-content: center;
     align-items: center;
 }
 
+.miss {
+    background-color: gray;
+}
+
+.hit {
+    background-color: red;
+}

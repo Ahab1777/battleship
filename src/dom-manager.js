@@ -3,8 +3,9 @@ import Game from "./game";
 
 //render board
 
-export default updateDOM(player){
-    //TODO - Enemy fleet remaining 
+export function renderGrid(player) {
+    //TODO Enemy fleet remaining 
+    //TODO make clicked squares unclickable 
     //render board
     const squareNodeList = document.querySelectorAll(`.${player.name}-container .square`);
     
@@ -23,5 +24,17 @@ export default updateDOM(player){
         if (boardSquare.hitStatus && boardSquare.ship) {
             square.classList.add('hit')
         }
+        
+
+
     })
 }
+
+export function updateGameStatus(currentPlayer){
+    const statusDisplay = document.querySelector('.game-status')
+
+    statusDisplay.innerHTML = `
+    Current player: ${currentPlayer}
+    `
+}
+
