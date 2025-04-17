@@ -32,6 +32,8 @@ export function renderGrid(match) {
         if (squareShip && squareShip.sunkStatus) {
             square.classList.add('sunk');
         }
+       
+
     })
 
     //render board- computer
@@ -56,6 +58,10 @@ export function renderGrid(match) {
         if (squareShip && squareShip.sunkStatus) {
             square.classList.add('sunk');
         }
+        if (squareShip && !squareShip.sunkStatus) {
+            square.classList.add('ship');
+        }
+
     })
 
     //display logic

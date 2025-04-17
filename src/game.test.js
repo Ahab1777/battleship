@@ -61,5 +61,7 @@ describe('Game controls', () => {
         match.checkWinCon()
         expect(match.gameHasEnded).toBe(true)
     })
+
+    
 })
 

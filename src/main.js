@@ -18,7 +18,8 @@ const match = new Game(player, computer)
 // renderGrid(match);
 
 //Position ships
-
+match.positionShips()
+renderGrid(match)
 //Click to attack
 const computerSquareNodeList = document.querySelectorAll(`.${computer.name}-container .square`);
 computerSquareNodeList.forEach(square => {

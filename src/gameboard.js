@@ -24,6 +24,17 @@ export default class Gameboard{
         return [row - 65, column - 1]
     }
 
+    convertArrayPositionToStringCoordinate(positionArray){
+        const [row, column] = positionArray;
+        //check if position is valid
+        if (!(row >= 0 && row <= 9) || !(column >= 0 && column <= 9)) {
+            throw new Error("Invalid position");
+        }
+        const rowString = String.fromCharCode(row + 65);
+        const columnString = (column + 1).toString();
+        return rowString + columnString;
+    }
+
     
     receiveAttack(coordinate){
         const [row, col] = this.convertStringCoordinateToArrayPosition(coordinate)
