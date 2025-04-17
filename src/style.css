@@ -18,7 +18,7 @@
     color: white;
 }
 
-.human-container, .computer-container{
+.player-container, .computer-container{
     display: grid;
     grid-template-columns: repeat(11, var(--square-side));
     grid-template-rows: repeat(11, var(--square-side));

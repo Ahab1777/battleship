@@ -8,15 +8,35 @@ const player = new Player('player')
 const computer = new Player('computer')
 
 const match = new Game(player, computer)
-match.positionShips()
-match.makeAttack('A1')
-match.makeAttack('B1')
-match.makeAttack('C1')
-console.log(player.gameboard)
-match.makeAttack('C8')
-renderGrid(player);
-renderGrid(computer);
+// match.positionShips()
+// match.makeAttack('A1')
+// match.makeAttack('B1')
+// match.makeAttack('C1')
+// console.log(player.gameboard)
+// match.togglePlayers()
+// match.makeAttack('C8')
+// renderGrid(match);
 
+//Position ships
+
+//Click to attack
+const computerSquareNodeList = document.querySelectorAll(`.${computer.name}-container .square`);
+computerSquareNodeList.forEach(square => {
+    square.addEventListener('click', () => {
+        console.log('click')
+        const position = square.getAttribute('data-pos');
+        match.makeAttack(position);
+        renderGrid(match);
+        match.checkWinCon();//TODO - skip rest if game ended
+        match.togglePlayers()
+        //TODO - delay to simulate computer "thinking"
+        match.makeAttack
+        renderGrid(match);
+        match.checkWinCon();
+        match.togglePlayers();
+
+    })
+}) 
 
 
 
