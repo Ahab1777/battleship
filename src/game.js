@@ -9,6 +9,7 @@ export default class Game{
         this.computerPlayer = computerPlayer;
         this.attackingPlayer = this.humanPlayer;
         this.defendingPlayer = this.computerPlayer;
+        this.gameHasEnded = false;
     }
 
     togglePlayers(){
@@ -48,8 +49,11 @@ export default class Game{
         this.computerPlayer.gameboard.placeShip(new Ship(3), 'A1', 'C1')
     }
 
-    runTurn(){
-
+    checkWinCon(){
+        //check if current defending player's fleet is sunk
+        if (this.defendingPlayer.gameboard.isFleetSunk()) {
+            this.gameHasEnded = true;
+        }
     }
 
 
@@ -66,11 +70,6 @@ export default class Game{
             this.defendingPlayer.gameboard.getSquareShip(coordinate)//returning null
             // this.defendingPlayer.gameboard._fleet[0].hit()//testing
         }
-        if (this.defendingPlayer.gameboard.isFleetSunk()) {
-            //alert(`${this.attackingPlayer.name} has won`)
-            console.log(`${this.attackingPlayer.name} won!`)
-            //TODO restart game logic
-        }
     }
 
     randomAttack(){
@@ -86,10 +85,5 @@ export default class Game{
         } while (this.defendingPlayer.gameboard.squareHitStatus(randomCoordinate));
         return randomCoordinate;
     }
-
-    humanAttack(coordinate){
-
-    }
-
 
 }

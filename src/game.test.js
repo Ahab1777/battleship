@@ -42,14 +42,24 @@ describe('Game controls', () => {
         expect(match.humanPlayer.name).toBe('human')
         expect(match.attackingPlayer).toBeInstanceOf(Player)
         match.makeAttack('A1')
-        console.log(match.computerPlayer.gameboard._fleet)
         expect(match.computerPlayer.gameboard._fleet[0].hitCount).toBe(1)
         match.makeAttack('B1')
         expect(match.computerPlayer.gameboard._fleet[0].hitCount).toBe(2)
         match.makeAttack('C1')
         expect(match.computerPlayer.gameboard.isFleetSunk()).toBe(true)
+    })
 
-
+    test('player wins game', () => {
+        match.makeAttack('A1')
+        match.makeAttack('B1')
+        expect(match.defendingPlayer.gameboard._fleet[0].sunkStatus).toBe(false)
+        expect(match.defendingPlayer.gameboard.isFleetSunk()).toBe(false)
+        expect(match.gameHasEnded).toBe(false)
+        match.makeAttack('C1')
+        expect(match.defendingPlayer.gameboard._fleet[0].sunkStatus).toBe(true)
+        expect(match.defendingPlayer.gameboard.isFleetSunk()).toBe(true)
+        match.checkWinCon()
+        expect(match.gameHasEnded).toBe(true)
     })
 })
 
