@@ -2,6 +2,7 @@ import Player from "./player.js";
 import Gameboard from "./gameboard.js";
 import Ship from "./ship.js";
 import { renderGrid } from "./dom-manager.js";
+import { arrayToString, stringToArray, checkIfStringOutOfBounds, checkIfArrayOutOfBounds } from "./utils.js";
 
 export default class Game{
     constructor(humanPlayer, computerPlayer) {
@@ -26,22 +27,22 @@ export default class Game{
             type: 'carrier',
             size: 5
             },
-            // {
-            // type: 'battleship',
-            // size: 4
-            // },
-            // {
-            // type: 'cruiser',
-            // size: 3
-            // },
-            // {
-            // type: 'submarine',
-            // size: 3
-            // },
-            // {
-            // type: 'destroyer',
-            // size: 2
-            // }
+            {
+            type: 'battleship',
+            size: 4
+            },
+            {
+            type: 'cruiser',
+            size: 3
+            },
+            {
+            type: 'submarine',
+            size: 2
+            },
+            {
+            type: 'destroyer',
+            size: 1
+            }
         ];
 
         //place ships in board
@@ -58,23 +59,59 @@ export default class Game{
 
             let attempts = 0; //testing
             const maxAttempts = 100;   //testing 
+            let isOverlap = false;
+            let isOutOfBounds = false;
             do {
                 randomStartingPosition = this.randomCoordinate();
-                randomEndingPosition = this.randomCoordinate(battleship._length, randomStartingPosition);
-                console.log(`Start: ${randomStartingPosition}, End: ${randomEndingPosition}`);
-                console.log(`Start has ship: ${this.humanPlayer.gameboard.getSquareShip(randomStartingPosition)}`);
-                console.log(`End has ship: ${this.humanPlayer.gameboard.getSquareShip(randomEndingPosition)}`);
+                randomEndingPosition = this.randomCoordinate(battleship.size, randomStartingPosition);
+
+                const [startRow, startCol] = stringToArray(randomStartingPosition)
+                const [endRow, endCol] = stringToArray(randomEndingPosition)
+
+                //Check position of ship
+                    //Iterate over each square in ships direction to check if another ship is present
+                isOverlap = false; //reset reference
+                isOutOfBounds = false // reset reference
+                if (startRow === endRow) { //ship is horizontal
+                    for (let index = 0; index < battleship.size; index++) {
+                        let currentCoordinate = arrayToString([startRow, startCol + index])
+                        if (checkIfStringOutOfBounds(currentCoordinate)) {
+                            isOutOfBounds = true
+                            continue
+                        }
+                        console.log(`startRow ${startRow} // endRow ${endRow} // Current coordinate ${currentCoordinate}`)
+                        if(this.humanPlayer.gameboard.getSquareShip(currentCoordinate)){
+                            isOverlap = true;
+                        }
+                    }
+                }
+                else if (startCol === endCol){ //ship is vertical
+                    for (let index = 0; index < battleship.size; index++) {
+                        let currentCoordinate = arrayToString([startRow + index, startCol])
+                        if (checkIfStringOutOfBounds(currentCoordinate)) {
+                            isOutOfBounds = true
+                            continue
+                        }
+                        console.log(`startCol ${startCol} // endCol ${endCol} // Current coordinate ${currentCoordinate}`)
+                        
+                        if(this.humanPlayer.gameboard.getSquareShip(currentCoordinate)){
+                            isOverlap = true;
+                        }
+                    }
+                }
+
+
+
                 attempts++;
                 if (attempts > maxAttempts) {
                     throw new Error("Unable to find valid positions for players's ship placement.");
                 }
             } while (
-                this.humanPlayer.gameboard.getSquareShip(randomStartingPosition) ||
-                this.humanPlayer.gameboard.getSquareShip(randomEndingPosition) ||
+                isOverlap ||
+                isOutOfBounds ||
                 randomStartingPosition === randomEndingPosition
             );
                 
-            console.log(`game.positionShips of player - startCoord: ${randomStartingPosition} //  endCoord: ${randomEndingPosition}`)
             this.humanPlayer.gameboard.placeShip(new Ship(battleship.size), randomStartingPosition, randomEndingPosition)
         })
 
@@ -88,16 +125,16 @@ export default class Game{
             
             do {
                 randomStartingPosition = this.randomCoordinate()
-                randomEndingPosition = this.randomCoordinate(battleship._length, randomStartingPosition)
+                randomEndingPosition = this.randomCoordinate(battleship.size, randomStartingPosition)
 
                 attempts++;
                 if (attempts > maxAttempts) {
                     throw new Error("Unable to find valid positions for computer's ship placement.");
                 }
-            } while (randomStartingPosition === randomEndingPosition ||
+            } while (
+                randomStartingPosition === randomEndingPosition ||
                 this.computerPlayer.gameboard.getSquareShip(randomStartingPosition) ||
                 this.computerPlayer.gameboard.getSquareShip(randomEndingPosition))
-                console.log(` game.positionShips of enemy - startCoord: ${randomStartingPosition} //  endCoord: ${randomEndingPosition}`)
             this.computerPlayer.gameboard.placeShip(new Ship(battleship.size), randomStartingPosition, randomEndingPosition)
         })
     }
@@ -125,13 +162,6 @@ export default class Game{
     }
 
     randomCoordinate(shipSize = null, originCoordinate = null) { // Accepts originCoordinate for correctly positioning ships
-
-        //Brainstorm
-            //randomCoord accepts ship size
-            //if origin coord + ship size (direciton should be random) is out of bounds, repeat
-            //return coord
-
-
         // Roll random coordinate
         const columns = 'ABCDEFGHIJ';
         const rows = 10;
@@ -147,18 +177,44 @@ export default class Game{
             
             let rowNewRandomCoordinate;
             let colNewRandomCoordinate;
+
+            const attempts = 100;
+            let timesAttempted = 0;
             do {
-    
-                if (direction === 0) {
-                    rowNewRandomCoordinate = rowOrigin + shipSize - 1;
-                    colNewRandomCoordinate = colOrigin;
+                switch (direction) {
+                    case 0: // Vertical
+                        if ((rowOrigin + shipSize) > 9) {
+                            rowNewRandomCoordinate = rowOrigin - shipSize
+                            colNewRandomCoordinate = colOrigin;
+                        }
+                        else{
+                            rowNewRandomCoordinate = rowOrigin + shipSize
+                            colNewRandomCoordinate = colOrigin;
+                        }
+                        break;
+                    case 1: // Horizontal
+                        if ((colOrigin + shipSize) > 9) {
+                            rowNewRandomCoordinate = rowOrigin;
+                            colNewRandomCoordinate = colOrigin - shipSize;
+                        }
+                        else{
+                            rowNewRandomCoordinate = rowOrigin;
+                            colNewRandomCoordinate = colOrigin + shipSize;
+                        }
+                        break
+                    default:
+                        break;
                 }
-                else if (direction === 1) {
-                    rowNewRandomCoordinate = rowOrigin;
-                    colNewRandomCoordinate = colOrigin + shipSize - 1;
-                }
+                // console.log(`Attempting to convert ${colNewRandomCoordinate},${rowNewRandomCoordinate}`)
+
                 randomCoordinate = this.humanPlayer.gameboard.convertArrayPositionToStringCoordinate([colNewRandomCoordinate, rowNewRandomCoordinate])
 
+                // console.log(`${colNewRandomCoordinate},${rowNewRandomCoordinate} is converted into ${randomCoordinate}`)
+
+                timesAttempted++
+                if (timesAttempted >= attempts) {
+                    throw new Error('Max number of attempts reached')
+                }
             } while(
                 rowNewRandomCoordinate < 0 ||
                 rowNewRandomCoordinate > 9 ||

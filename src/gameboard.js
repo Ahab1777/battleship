@@ -1,4 +1,5 @@
 import Ship from "./ship.js";
+import { arrayToString, stringToArray, checkIfArrayOutOfBounds, checkIfStringOutOfBounds } from "./utils.js";
 
 export default class Gameboard{
     constructor(squareGenerator = () => new Square()){
@@ -21,12 +22,15 @@ export default class Gameboard{
         if (!(row >= 65 && row <= 74) || !(column >= 1 && column <= 10)) {
             throw new Error("Invalid coordinate");
         }
+        //console.log(`${rowColumnString} becomes ${[row - 65, column - 1]}`)
         return [row - 65, column - 1]
     }
 
     convertArrayPositionToStringCoordinate(positionArray){
         const [row, column] = positionArray;
+        //console.log("🚀 ~ Gameboard ~ convertArrayPositionToStringCoordinate ~ positionArray:", positionArray)
         //check if position is valid
+        
         if (!(row >= 0 && row <= 9) || !(column >= 0 && column <= 9)) {
             throw new Error("Invalid position");
         }
@@ -37,7 +41,7 @@ export default class Gameboard{
 
     
     receiveAttack(coordinate){
-        const [row, col] = this.convertStringCoordinateToArrayPosition(coordinate)
+        const [row, col] = stringToArray(coordinate)
         const square = this._board[row][col]
         square.squareHit()
     }
@@ -47,26 +51,27 @@ export default class Gameboard{
     }
 
     squareHitStatus(coordinate){
-        const position = this.convertStringCoordinateToArrayPosition(coordinate)
+        const position = stringToArray(coordinate)
         return this._board[position[0]][position[1]].hitStatus
     }
     
     getSquareShip(coordinate){
-        const position = this.convertStringCoordinateToArrayPosition(coordinate)
+        const position = stringToArray(coordinate)
         return this._board[position[0]][position[1]].ship
     }
     
     placeShip(ship, startCoordinate, endCoordinate){
         const size = ship.shipSize;
-        const startPosition = this.convertStringCoordinateToArrayPosition(startCoordinate)
+        const startPosition = stringToArray(startCoordinate)
         console.log("🚀 ~ Gameboard ~ placeShip ~ startPosition:", startPosition, "Converted from: ", startCoordinate)
         
-        const endPosition = this.convertStringCoordinateToArrayPosition(endCoordinate)
+        const endPosition = stringToArray(endCoordinate)
         console.log("🚀 ~ Gameboard ~ placeShip ~ endPosition:", endPosition, "Converted from: ", endCoordinate)
         //populate board in correct direction until ship length size
-        //if start X > end X, subtract positioning
-        //if start X < end X, add for positioning
-        if (startPosition[0] != endPosition[0]) { //if X axis changes, ship is horizontal
+        //if X axis changes, ship is horizontal
+            //if start X > end X, subtract positioning
+            //if start X < end X, add for positioning
+        if (startPosition[0] < endPosition[0]) { 
             const xAxis = startPosition[0]
             const yAxis = startPosition[1]
             for (let x = 0; x < size; x++) {
@@ -74,13 +79,30 @@ export default class Gameboard{
             }
             this._fleet.push(ship)
         }
-        //if start Y > end Y, subtract for positioning
-        //if start Y < end Y, end for positioning
-        else if (startPosition[1] != endPosition[1]) {//if Y axis changes, ship is vertical
+        else if (startPosition[0] > endPosition[0]){
+            const xAxis = startPosition[0]
+            const yAxis = startPosition[1]
+            for (let x = 0; x < size; x++) {
+                this._board[xAxis - x][yAxis].ship = ship//place ship along its direction on board
+            }
+            this._fleet.push(ship)
+        }
+        //if Y axis changes, ship is vertical
+            //if start Y > end Y, subtract for positioning
+            //if start Y < end Y, add for positioning
+        else if (startPosition[1] < endPosition[1]) {
             const xAxis = startPosition[0]
             const yAxis = startPosition[1]
             for (let y = 0; y < size; y++) {
                 this._board[xAxis][yAxis + y].ship = ship//place ship along its direction on board
+            }
+            this._fleet.push(ship)
+        }
+        else if (startPosition[1] > endPosition[1]) {
+            const xAxis = startPosition[0]
+            const yAxis = startPosition[1]
+            for (let y = 0; y < size; y++) {
+                this._board[xAxis][yAxis - y].ship = ship//place ship along its direction on board
             }
             this._fleet.push(ship)
         }

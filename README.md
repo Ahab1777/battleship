@@ -6,3 +6,7 @@ No.	Class of ship	Size
 3	Cruiser	        3
 4	Submarine	    3
 5	Destroyer	    2
+
+
+# What I would do differently
+- Make another file just for utilities like converting coordinate to array and back
