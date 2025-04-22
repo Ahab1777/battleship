@@ -41,7 +41,7 @@ export default class Game{
             },
             {
             type: 'destroyer',
-            size: 1
+            size: 2
             }
         ];
 
@@ -55,10 +55,8 @@ export default class Game{
             let randomStartingPosition;
             let randomEndingPosition;
             
-        
-
             let attempts = 0; //testing
-            const maxAttempts = 100;   //testing 
+            const maxAttempts = 1000;   //testing 
             let isOverlap = false;
             let isOutOfBounds = false;
             do {
@@ -121,20 +119,55 @@ export default class Game{
             let randomEndingPosition;
 
             let attempts = 0; //testing
-            const maxAttempts = 100;   //testing 
-            
+            const maxAttempts = 1000;   //testing 
+            let isOverlap = false;
+            let isOutOfBounds = false;
             do {
                 randomStartingPosition = this.randomCoordinate()
                 randomEndingPosition = this.randomCoordinate(battleship.size, randomStartingPosition)
+
+                const [startRow, startCol] = stringToArray(randomStartingPosition)
+                const [endRow, endCol] = stringToArray(randomEndingPosition)
+
+                isOverlap = false; //reset reference
+                isOutOfBounds = false // reset reference
+                if (startRow === endRow) { //ship is horizontal
+                    for (let index = 0; index < battleship.size; index++) {
+                        let currentCoordinate = arrayToString([startRow, startCol + index])
+                        if (checkIfStringOutOfBounds(currentCoordinate)) {
+                            isOutOfBounds = true
+                            continue
+                        }
+                        console.log(`startRow ${startRow} // endRow ${endRow} // Current coordinate ${currentCoordinate}`)
+                        if(this.computerPlayer.gameboard.getSquareShip(currentCoordinate)){
+                            isOverlap = true;
+                        }
+                    }
+                }
+                else if (startCol === endCol){ //ship is vertical
+                    for (let index = 0; index < battleship.size; index++) {
+                        let currentCoordinate = arrayToString([startRow + index, startCol])
+                        if (checkIfStringOutOfBounds(currentCoordinate)) {
+                            isOutOfBounds = true
+                            continue
+                        }
+                        console.log(`startCol ${startCol} // endCol ${endCol} // Current coordinate ${currentCoordinate}`)
+                        
+                        if(this.computerPlayer.gameboard.getSquareShip(currentCoordinate)){
+                            isOverlap = true;
+                        }
+                    }
+                }
 
                 attempts++;
                 if (attempts > maxAttempts) {
                     throw new Error("Unable to find valid positions for computer's ship placement.");
                 }
             } while (
-                randomStartingPosition === randomEndingPosition ||
-                this.computerPlayer.gameboard.getSquareShip(randomStartingPosition) ||
-                this.computerPlayer.gameboard.getSquareShip(randomEndingPosition))
+                isOverlap ||
+                isOutOfBounds ||
+                randomStartingPosition === randomEndingPosition
+            )
             this.computerPlayer.gameboard.placeShip(new Ship(battleship.size), randomStartingPosition, randomEndingPosition)
         })
     }
