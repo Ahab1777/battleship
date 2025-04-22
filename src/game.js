@@ -27,22 +27,22 @@ export default class Game{
             type: 'carrier',
             size: 5
             },
-            // {
-            // type: 'battleship',
-            // size: 4
-            // },
-            // {
-            // type: 'cruiser',
-            // size: 3
-            // },
-            // {
-            // type: 'submarine',
-            // size: 2
-            // },
-            // {
-            // type: 'destroyer',
-            // size: 2
-            // }
+            {
+            type: 'battleship',
+            size: 4
+            },
+            {
+            type: 'cruiser',
+            size: 3
+            },
+            {
+            type: 'submarine',
+            size: 2
+            },
+            {
+            type: 'destroyer',
+            size: 2
+            }
         ];
 
         //place ships in board
@@ -77,7 +77,6 @@ export default class Game{
                             isOutOfBounds = true
                             continue
                         }
-                        console.log(`startRow ${startRow} // endRow ${endRow} // Current coordinate ${currentCoordinate}`)
                         if(this.humanPlayer.gameboard.getSquareShip(currentCoordinate)){
                             isOverlap = true;
                         }
@@ -90,7 +89,7 @@ export default class Game{
                             isOutOfBounds = true
                             continue
                         }
-                        console.log(`startCol ${startCol} // endCol ${endCol} // Current coordinate ${currentCoordinate}`)
+                        //console.log(`startCol ${startCol} // endCol ${endCol} // Current coordinate ${currentCoordinate}`)
                         
                         if(this.humanPlayer.gameboard.getSquareShip(currentCoordinate)){
                             isOverlap = true;
@@ -138,7 +137,7 @@ export default class Game{
                             isOutOfBounds = true
                             continue
                         }
-                        console.log(`startRow ${startRow} // endRow ${endRow} // Current coordinate ${currentCoordinate}`)
+                        //console.log(`startRow ${startRow} // endRow ${endRow} // Current coordinate ${currentCoordinate}`)
                         if(this.computerPlayer.gameboard.getSquareShip(currentCoordinate)){
                             isOverlap = true;
                         }
@@ -151,7 +150,7 @@ export default class Game{
                             isOutOfBounds = true
                             continue
                         }
-                        console.log(`startCol ${startCol} // endCol ${endCol} // Current coordinate ${currentCoordinate}`)
+                        //console.log(`startCol ${startCol} // endCol ${endCol} // Current coordinate ${currentCoordinate}`)
                         
                         if(this.computerPlayer.gameboard.getSquareShip(currentCoordinate)){
                             isOverlap = true;

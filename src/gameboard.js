@@ -63,10 +63,8 @@ export default class Gameboard{
     placeShip(ship, startCoordinate, endCoordinate){
         const size = ship.shipSize;
         const startPosition = stringToArray(startCoordinate)
-        console.log("🚀 ~ Gameboard ~ placeShip ~ startPosition:", startPosition, "Converted from: ", startCoordinate)
         
         const endPosition = stringToArray(endCoordinate)
-        console.log("🚀 ~ Gameboard ~ placeShip ~ endPosition:", endPosition, "Converted from: ", endCoordinate)
         //populate board in correct direction until ship length size
         //if X axis changes, ship is horizontal
             //if start X > end X, subtract positioning

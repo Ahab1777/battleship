@@ -19,22 +19,25 @@ export function renderGrid(match) {
         const boardSquare = player.gameboard._board[row][col]
 
         //Square logic
-        //1 - is hit - missed
+        //1 - Intact ship
+        const squareShip = player.gameboard.getSquareShip(position);
+        if (squareShip && !squareShip.sunkStatus) {
+            square.classList.add('ship');
+        }
+        //2 - is hit - missed
         if (boardSquare.hitStatus && !boardSquare.ship) {
             square.classList.add('miss')
         }
-        //2 - is hit - ship hit
+        //3 - is hit - ship hit
         if (boardSquare.hitStatus && boardSquare.ship) {
             square.classList.add('hit')
+            square.classList.remove('ship');
         }
-        //3 - is hit - sunk
-        const squareShip = player.gameboard.getSquareShip(position);
+        //4 - is hit - sunk
         if (squareShip && squareShip.sunkStatus) {
             square.classList.add('sunk');
-        }
-        //4 - Intact ship
-        if (squareShip && !squareShip.sunkStatus) {
-            square.classList.add('ship');
+            square.classList.remove('ship');
+
         }
        
 
@@ -81,3 +84,25 @@ export function renderGrid(match) {
     
 }
 
+export function resetDOM() {
+    const allSquares = document.querySelectorAll('.square');
+    allSquares.forEach(square => {
+        square.className = 'square'; // Reset all classes
+    });
+
+    const display = document.querySelector('.game-status');
+    display.textContent = ''; // Clear the game status display
+
+    const computerSquareNodeList = document.querySelectorAll(`.computer-container .square`);
+    computerSquareNodeList.forEach(square => {
+        const newSquare = square.cloneNode(true); // Clone the square to remove all listeners
+        square.parentNode.replaceChild(newSquare, square);
+    });
+
+    const playerSquareNodeList = document.querySelectorAll(`.player-container .square`);
+    playerSquareNodeList.forEach(square => {
+        const newSquare = square.cloneNode(true); // Clone the square to remove all listeners
+        square.parentNode.replaceChild(newSquare, square);
+    });
+
+}

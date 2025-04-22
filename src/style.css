@@ -82,6 +82,10 @@
     align-items: center;
 }
 
+.player-name-header {
+    text-align: center;    
+}
+
 .miss {
     background-color: royalblue;
 }
@@ -96,4 +100,60 @@
 
 .ship{
     background-color: darkgreen;
+}
+
+.square:not(.miss):not(.hit):not(.sunk):hover {
+    cursor: pointer;
+}
+
+/* Game Display */
+
+.game-display {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+}
+
+.game-status {
+    grid-area: 1 / 1 / 2 / 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    color: white;
+}
+
+.new-game-btn-container, .random-positions-btn-container {
+    grid-template-columns:auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button{
+    background-color: darkblue;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* make button react when hovered and clicked */
+button:hover {
+    background-color: blue;
+}
+button:active {
+    background-color: darkblue;
+}
+button:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+}
+button:focus {
+    outline: none;
+}
+button:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
 }
