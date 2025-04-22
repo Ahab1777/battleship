@@ -32,6 +32,10 @@ export function renderGrid(match) {
         if (squareShip && squareShip.sunkStatus) {
             square.classList.add('sunk');
         }
+        //4 - Intact ship
+        if (squareShip && !squareShip.sunkStatus) {
+            square.classList.add('ship');
+        }
        
 
     })
@@ -58,9 +62,7 @@ export function renderGrid(match) {
         if (squareShip && squareShip.sunkStatus) {
             square.classList.add('sunk');
         }
-        if (squareShip && !squareShip.sunkStatus) {
-            square.classList.add('ship');
-        }
+        
 
     })
 
@@ -78,12 +80,4 @@ export function renderGrid(match) {
     }
     
 }
-
-// export function updateGameStatus(currentPlayer){
-//     const statusDisplay = document.querySelector('.game-status')
-
-//     statusDisplay.innerHTML = `
-//     Current player: ${currentPlayer}
-//     `
-// }
 

@@ -8,16 +8,8 @@ const player = new Player('player')
 const computer = new Player('computer')
 
 const match = new Game(player, computer)
-// match.positionShips()
-// match.makeAttack('A1')
-// match.makeAttack('B1')
-// match.makeAttack('C1')
-// console.log(player.gameboard)
-// match.togglePlayers()
-// match.makeAttack('C8')
-// renderGrid(match);
 
-//Position ships
+//Position ships button
 match.positionShips()
 renderGrid(match)
 //Click to attack
@@ -35,7 +27,7 @@ computerSquareNodeList.forEach(square => {
         renderGrid(match);
         match.checkWinCon();
         match.togglePlayers();
-
+        renderGrid(match)
     })
 }) 
 

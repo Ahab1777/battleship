@@ -27,22 +27,22 @@ export default class Game{
             type: 'carrier',
             size: 5
             },
-            {
-            type: 'battleship',
-            size: 4
-            },
-            {
-            type: 'cruiser',
-            size: 3
-            },
-            {
-            type: 'submarine',
-            size: 2
-            },
-            {
-            type: 'destroyer',
-            size: 2
-            }
+            // {
+            // type: 'battleship',
+            // size: 4
+            // },
+            // {
+            // type: 'cruiser',
+            // size: 3
+            // },
+            // {
+            // type: 'submarine',
+            // size: 2
+            // },
+            // {
+            // type: 'destroyer',
+            // size: 2
+            // }
         ];
 
         //place ships in board
