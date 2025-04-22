@@ -54,11 +54,27 @@ export default class Game{
             let randomStartingPosition;
             let randomEndingPosition;
             
+        
+
+            let attempts = 0; //testing
+            const maxAttempts = 100;   //testing 
             do {
-                randomStartingPosition = this.randomCoordinate()
-                randomEndingPosition = this.randomCoordinate(battleship._length, randomStartingPosition)
-            } while (this.humanPlayer.gameboard.getSquareShip(randomStartingPosition) && this.humanPlayer.gameboard.getSquareShip(randomEndingPosition))
-                console.log(`game.positionships of player - startCoord: ${randomStartingPosition} //  endCoord: ${randomEndingPosition}`)
+                randomStartingPosition = this.randomCoordinate();
+                randomEndingPosition = this.randomCoordinate(battleship._length, randomStartingPosition);
+                console.log(`Start: ${randomStartingPosition}, End: ${randomEndingPosition}`);
+                console.log(`Start has ship: ${this.humanPlayer.gameboard.getSquareShip(randomStartingPosition)}`);
+                console.log(`End has ship: ${this.humanPlayer.gameboard.getSquareShip(randomEndingPosition)}`);
+                attempts++;
+                if (attempts > maxAttempts) {
+                    throw new Error("Unable to find valid positions for players's ship placement.");
+                }
+            } while (
+                this.humanPlayer.gameboard.getSquareShip(randomStartingPosition) ||
+                this.humanPlayer.gameboard.getSquareShip(randomEndingPosition) ||
+                randomStartingPosition === randomEndingPosition
+            );
+                
+            console.log(`game.positionShips of player - startCoord: ${randomStartingPosition} //  endCoord: ${randomEndingPosition}`)
             this.humanPlayer.gameboard.placeShip(new Ship(battleship.size), randomStartingPosition, randomEndingPosition)
         })
 
@@ -66,11 +82,21 @@ export default class Game{
         standardFleet.forEach((battleship) => {
             let randomStartingPosition;
             let randomEndingPosition;
+
+            let attempts = 0; //testing
+            const maxAttempts = 100;   //testing 
             
             do {
                 randomStartingPosition = this.randomCoordinate()
-                randomEndingPosition = this.randomCoordinate(randomStartingPosition)
-            } while (this.computerPlayer.gameboard.getSquareShip(randomStartingPosition) && this.computerPlayer.gameboard.getSquareShip(randomEndingPosition))
+                randomEndingPosition = this.randomCoordinate(battleship._length, randomStartingPosition)
+
+                attempts++;
+                if (attempts > maxAttempts) {
+                    throw new Error("Unable to find valid positions for computer's ship placement.");
+                }
+            } while (randomStartingPosition === randomEndingPosition ||
+                this.computerPlayer.gameboard.getSquareShip(randomStartingPosition) ||
+                this.computerPlayer.gameboard.getSquareShip(randomEndingPosition))
                 console.log(` game.positionShips of enemy - startCoord: ${randomStartingPosition} //  endCoord: ${randomEndingPosition}`)
             this.computerPlayer.gameboard.placeShip(new Ship(battleship.size), randomStartingPosition, randomEndingPosition)
         })
@@ -100,7 +126,7 @@ export default class Game{
 
     randomCoordinate(shipSize = null, originCoordinate = null) { // Accepts originCoordinate for correctly positioning ships
 
-        //Brainstrom
+        //Brainstorm
             //randomCoord accepts ship size
             //if origin coord + ship size (direciton should be random) is out of bounds, repeat
             //return coord
@@ -119,62 +145,30 @@ export default class Game{
             const [colOrigin, rowOrigin] = this.humanPlayer.gameboard.convertStringCoordinateToArrayPosition(originCoordinate)            
             
             
+            let rowNewRandomCoordinate;
+            let colNewRandomCoordinate;
             do {
-                let rowNewRandomCoordinate;
-                let colNewRandomCoordinate;
     
                 if (direction === 0) {
-                    rowNewRandomCoordinate = rowOrigin + shipSize
-                    colNewRandomCoordinate = colOrigin
+                    rowNewRandomCoordinate = rowOrigin + shipSize - 1;
+                    colNewRandomCoordinate = colOrigin;
                 }
                 else if (direction === 1) {
                     rowNewRandomCoordinate = rowOrigin;
-                    colNewRandomCoordinate = colOrigin + shipSize
+                    colNewRandomCoordinate = colOrigin + shipSize - 1;
                 }
                 randomCoordinate = this.humanPlayer.gameboard.convertArrayPositionToStringCoordinate([colNewRandomCoordinate, rowNewRandomCoordinate])
 
-            } while(rowNewRandomCoordinate <= 9 && rowNewRandomCoordinate >= 9 && colNewRandomCoordinate <= 9 && colNewRandomCoordinate >=9  && this.defendingPlayer.gameboard.squareHitStatus(randomCoordinate))
+            } while(
+                rowNewRandomCoordinate < 0 ||
+                rowNewRandomCoordinate > 9 ||
+                colNewRandomCoordinate < 0 || 
+                colNewRandomCoordinate > 9 || 
+                this.defendingPlayer.gameboard.squareHitStatus(randomCoordinate))
 
 
             return randomCoordinate
         }
-
-
-
-
-        // if (originCoordinate) {
-        //     const originColumn = originCoordinate[0];
-        //     const originRow = parseInt(originCoordinate.slice(1), 10);
-
-        //     const columnIndex = columns.indexOf(originColumn);
-        //     const possibleColumns = [
-        //         columns[columnIndex - 1] || null,
-        //         originColumn,
-        //         columns[columnIndex + 1] || null
-        //     ].filter(Boolean);
-
-        //     const possibleRows = [
-        //         originRow - 1 >= 1 ? originRow - 1 : null,
-        //         originRow,
-        //         originRow + 1 <= rows ? originRow + 1 : null
-        //     ].filter(Boolean);
-
-        //     const orthogonalCoordinates = [];
-
-        //     possibleColumns.forEach((col) => {
-        //         possibleRows.forEach((row) => {
-        //             if (col === originColumn || row === originRow) { // Ensure no diagonal positions
-        //                 orthogonalCoordinates.push(`${col}${row}`);
-        //             }
-        //         });
-        //     });
-
-        //     do {
-        //         randomCoordinate = orthogonalCoordinates[Math.floor(Math.random() * orthogonalCoordinates.length)];
-        //     } while (this.defendingPlayer.gameboard.squareHitStatus(randomCoordinate) || randomCoordinate === originCoordinate);
-
-        //     return randomCoordinate;
-        // }
 
         do {
             const randomColumn = columns[Math.floor(Math.random() * columns.length)];

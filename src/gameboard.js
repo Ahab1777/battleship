@@ -59,8 +59,13 @@ export default class Gameboard{
     placeShip(ship, startCoordinate, endCoordinate){
         const size = ship.shipSize;
         const startPosition = this.convertStringCoordinateToArrayPosition(startCoordinate)
+        console.log("🚀 ~ Gameboard ~ placeShip ~ startPosition:", startPosition, "Converted from: ", startCoordinate)
+        
         const endPosition = this.convertStringCoordinateToArrayPosition(endCoordinate)
+        console.log("🚀 ~ Gameboard ~ placeShip ~ endPosition:", endPosition, "Converted from: ", endCoordinate)
         //populate board in correct direction until ship length size
+        //if start X > end X, subtract positioning
+        //if start X < end X, add for positioning
         if (startPosition[0] != endPosition[0]) { //if X axis changes, ship is horizontal
             const xAxis = startPosition[0]
             const yAxis = startPosition[1]
@@ -69,6 +74,8 @@ export default class Gameboard{
             }
             this._fleet.push(ship)
         }
+        //if start Y > end Y, subtract for positioning
+        //if start Y < end Y, end for positioning
         else if (startPosition[1] != endPosition[1]) {//if Y axis changes, ship is vertical
             const xAxis = startPosition[0]
             const yAxis = startPosition[1]
@@ -76,6 +83,9 @@ export default class Gameboard{
                 this._board[xAxis][yAxis + y].ship = ship//place ship along its direction on board
             }
             this._fleet.push(ship)
+        }
+        else if (startCoordinate === endCoordinate){
+            throw new Error('Start and end coordinates cannot be the same');
         }
     }
     
