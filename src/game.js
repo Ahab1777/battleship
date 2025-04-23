@@ -37,7 +37,7 @@ export default class Game{
             },
             {
             type: 'submarine',
-            size: 2
+            size: 3
             },
             {
             type: 'destroyer',
