@@ -20,30 +20,9 @@ export default class Game{
         this.defendingPlayer = this.defendingPlayer === this.humanPlayer ? this.computerPlayer : this.humanPlayer;
     }
 
-    positionShips(){
+    positionShips(standardFleet){
         //randomly place ships on each players board
-        const standardFleet = [
-            {
-            type: 'carrier',
-            size: 5
-            },
-            {
-            type: 'battleship',
-            size: 4
-            },
-            {
-            type: 'cruiser',
-            size: 3
-            },
-            {
-            type: 'submarine',
-            size: 3
-            },
-            {
-            type: 'destroyer',
-            size: 2
-            }
-        ];
+        
 
         //place ships in board
         //TODO place them randomly

@@ -1,56 +1,108 @@
 import Player from "./player.js";
-import Gameboard from "./gameboard.js";
+import Gameboard, { Square } from "./gameboard.js";
 import Game from "./game.js";
 import { renderGrid, resetDOM } from "./dom-manager.js";
+import { dragStart, dragEnter, dragOver, dragLeave, drop } from "./utils.js";
 
-const newGameBtn = document.querySelector('.new-game');
-newGameBtn.addEventListener('click', () => {
-    console.log('clicked')
-    resetDOM()
-    let player = new Player('player')
-    let computer = new Player('computer')
-    let match = new Game(player, computer)
-    match.positionShips()
-    renderGrid(match)
 
-    //Click to attack
-    const computerSquareNodeList = document.querySelectorAll(`.${computer.name}-container .square`);
-    computerSquareNodeList.forEach(square => {
-        square.addEventListener('click', () => {
-            const position = square.getAttribute('data-pos');
+const standardFleet = [
+  {
+    type: "carrier",
+    size: 5,
+  },
+  {
+    type: "battleship",
+    size: 4,
+  },
+  {
+    type: "cruiser",
+    size: 3,
+  },
+  {
+    type: "submarine",
+    size: 3,
+  },
+  {
+    type: "destroyer",
+    size: 2,
+  },
+];
 
-            // Player's attack
-            match.makeAttack(position);
-            renderGrid(match);
-            match.checkWinCon();
-            if (match.gameHasEnded) return; // Stop if the game has ended
-            match.togglePlayers();
-            // Make the board unclickable
-            computerSquareNodeList.forEach(square => {
-                square.style.pointerEvents = 'none';
-            });
+const newGameBtn = document.querySelector(".new-game");
+newGameBtn.addEventListener("click", () => {
+  console.log("clicked");
+  resetDOM();
+  let player = new Player("player");
+  let computer = new Player("computer");
+  let match = new Game(player, computer);
+  match.positionShips(standardFleet);
+  renderGrid(match);
 
-            
-            // Re-enable the board after the computer's turn
-            setTimeout(() => {
-                computerSquareNodeList.forEach(square => {
-                    square.style.pointerEvents = 'auto';
-                });
-            }, 500); // Match the delay of the computer's attack
-            
-            // Disable the clicked square
-            square.style.pointerEvents = 'none';
-            // Computer's attack
-            setTimeout(() => { // Add a delay to simulate the computer "thinking"
-                match.makeAttack();
-                renderGrid(match);
-                match.checkWinCon();
-                if (match.gameHasEnded) return; // Stop if the game has ended
-                match.togglePlayers();
-                renderGrid(match);
-            }, 500); // 500ms delay
+  //Click to attack
+  const computerSquareNodeList = document.querySelectorAll(
+    `.${computer.name}-container .square`
+  );
+  computerSquareNodeList.forEach((square) => {
+    square.addEventListener("click", () => {
+      const position = square.getAttribute("data-pos");
+
+      // Player's attack
+      match.makeAttack(position);
+      renderGrid(match);
+      match.checkWinCon();
+      if (match.gameHasEnded) return; // Stop if the game has ended
+      match.togglePlayers();
+      // Make the board unclickable
+      computerSquareNodeList.forEach((square) => {
+        square.style.pointerEvents = "none";
+      });
+
+      // Re-enable the board after the computer's turn
+      setTimeout(() => {
+        computerSquareNodeList.forEach((square) => {
+          square.style.pointerEvents = "auto";
         });
-    }) 
+      }, 500); // Match the delay of the computer's attack
+
+      // Disable the clicked square
+      square.style.pointerEvents = "none";
+      // Computer's attack
+      setTimeout(() => {
+        // Add a delay to simulate the computer "thinking"
+        match.makeAttack();
+        renderGrid(match);
+        match.checkWinCon();
+        if (match.gameHasEnded) return; // Stop if the game has ended
+        match.togglePlayers();
+        renderGrid(match);
+      }, 500); // 500ms delay
+    });
+  });
+});
+
+//Generate fleet for custom positioning
+const fleet = document.querySelectorAll(".docked-ship");
+fleet.forEach((dock, index) => {
+    const shipSize = standardFleet[index].size
+    const ship = document.createElement("div");
+    ship.setAttribute('draggable', 'true')
+    ship.dataset.size = shipSize
+    ship.id = standardFleet[index].type
+    ship.addEventListener('dragstart', dragStart)
+    for (let i = 0; i < shipSize; i++) {
+        const squareElement = document.createElement("div");
+        squareElement.classList.add("square", 'ship');
+        ship.appendChild(squareElement);
+    }
+    dock.appendChild(ship);
+});
 
 
+//Make player's board a drop-zone
+const playerSquareNodeList = document.querySelectorAll(`.player-container .square`)
+playerSquareNodeList.forEach(square => {
+    square.addEventListener('dragenter', dragEnter)
+    square.addEventListener('dragover', dragOver);
+    square.addEventListener('dragleave', dragLeave);
+    square.addEventListener('drop', drop);
 })

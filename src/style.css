@@ -72,6 +72,12 @@ button:focus-visible {
     color: white;
 }
 
+.fleet{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
 /* Battle grid */
 
 .battle-container{
@@ -176,3 +182,12 @@ button:focus-visible {
     cursor: pointer;
 }
 
+/* Drag and Drop */
+
+.drag-over {
+    border: dashed 3px red;
+}
+
+.hide {
+    display: none;
+}

@@ -1,5 +1,3 @@
-
-
 export function stringToArray(string) {
     const rowString = string[0]
     const row = rowString.charCodeAt(0);
@@ -55,4 +53,77 @@ export function arrayToString(array){
     const rowString = String.fromCharCode(row + 65);
     const columnString = (column + 1).toString();
     return rowString + columnString;
+}
+
+// Drag and drop functions
+
+export function dragStart(e){
+    console.log('drag starts...');
+    const direction = e.target.dataset.direction || 'vertical'; // Default to vertical if not provided
+    const shipLength = e.target.dataset.size;
+
+    e.dataTransfer.setData('text/plain', JSON.stringify({
+        direction: direction,
+        shipLength: shipLength
+    }))
+    
+    setTimeout(() => {
+        e.target.classList.add('hide');
+    }, 0);
+}
+
+export function dragEnter(e) {
+    e.preventDefault();
+    e.target.classList.add('drag-over');
+
+    
+}
+
+export function dragOver(e) {
+    e.preventDefault();
+    
+    // Get all data from text/plain
+    const dragData = JSON.parse(e.dataTransfer.getData('text/plain'));
+    const numberOfSquaresToBeRendered = parseInt(dragData.shipLength, 10);
+    const direction = dragData.direction;
+    
+    e.target.classList.add('drag-over');
+    const coordinate = stringToArray(e.target.dataset.pos);
+    const playerSquareNodeList = document.querySelectorAll('.player-container .square');
+
+    for (let i = 0; i < numberOfSquaresToBeRendered; i++) {
+        let targetCoordinate;
+        
+        if (direction === 'vertical') {
+            targetCoordinate = [coordinate[0] + i, coordinate[1]];
+        } else if (direction === 'horizontal') {
+            targetCoordinate = [coordinate[0], coordinate[1] + i];
+        }
+
+        const targetCoordinateString = arrayToString(targetCoordinate);
+        const targetSquare = Array.from(playerSquareNodeList).find(
+            square => square.dataset.pos === targetCoordinateString
+        );
+        
+        if (targetSquare) {
+            targetSquare.classList.add('drag-over');
+        }
+    }
+}
+
+export function dragLeave(e) {
+    e.target.classList.remove('drag-over');
+}
+
+export function drop(e, placeShipFunction) {
+    e.target.classList.remove('drag-over');
+
+    // get the draggable element
+    const id = e.dataTransfer.getData('text/plain');
+    const draggable = document.getElementById(id);
+    // add it to the drop target
+    e.target.appendChild(draggable);
+
+    // display the draggable element
+    draggable.classList.remove('hide');
 }
