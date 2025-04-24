@@ -28,13 +28,17 @@ const standardFleet = [
   },
 ];
 
+let player;
+let computer;
+let match;
+
 const newGameBtn = document.querySelector(".new-game");
 newGameBtn.addEventListener("click", () => {
   console.log("clicked");
   resetDOM();
-  let player = new Player("player");
-  let computer = new Player("computer");
-  let match = new Game(player, computer);
+  player = new Player("player");
+  computer = new Player("computer");
+  match = new Game(player, computer);
   match.positionShips(standardFleet);
   renderGrid(match);
 
@@ -105,5 +109,8 @@ playerSquareNodeList.forEach(square => {
     square.addEventListener('dragenter', dragEnter)
     square.addEventListener('dragover', dragOver);
     square.addEventListener('dragleave', dragLeave);
-    square.addEventListener('drop', drop);
+    square.addEventListener('drop', (e) => {
+      //const playerGameboard = match.humanPlayer.gameboard;
+      drop(e)
+    });
 })

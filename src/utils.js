@@ -1,3 +1,5 @@
+import Ship from "./ship.js";
+
 export function stringToArray(string) {
     const rowString = string[0]
     const row = rowString.charCodeAt(0);
@@ -81,16 +83,18 @@ export function dragStart(e){
     e.dataTransfer.setDragImage(dragImage, offsetX, offsetY)
 
 
-    // const direction = e.target.dataset.direction || 'vertical'; // Default to vertical if not provided
-    // const shipLength = e.target.dataset.size;
-    // e.dataTransfer.setData('text/plain', JSON.stringify({
-    //     direction: direction,
-    //     shipLength: shipLength
-    // }))
+    const direction = e.target.dataset.direction || 'vertical'; // Default to vertical if not provided
+    const shipLength = e.target.dataset.size;
+    e.dataTransfer.setData('text/plain', JSON.stringify({
+        direction: direction,
+        shipLength: shipLength
+    }))
+
+    console.log(shipLength)
     
-    // setTimeout(() => {
-    //     e.target.classList.add('hide');
-    // }, 0);
+    setTimeout(() => {
+        e.target.classList.add('hide');
+    }, 0);
 }
 
 export function dragEnd(e){
@@ -108,34 +112,31 @@ export function dragEnd(e){
     //remove dragging class from boat
     dockedShip.classList.remove('dragging-ship')
 
-    //add/remove effect to the selected squares    
+    //Get ship back to dock if left on invalid drop zone
+    e.target.classList.remove('hide');
 }
 
 export function dragEnter(e) {
     console.log('dragEnters...')
     e.preventDefault();
     e.target.classList.add('drag-over');
-
-    
 }
 
 export function dragOver(e) {
     e.preventDefault();
+    e.target.classList.add('drag-over');
+    
     //select element being dragged
     const shipBeingDragged = document.querySelector('.dragging-ship')
-    const squareOver = e.target
 
     //Grab the size of the ship bring dragged
     const shipSize = parseInt(shipBeingDragged.dataset.size, 10); // Converts to a number
 
-    //DORMANT CODE
-    // Get all data from text/plain
+    //TODO - direction logic
     const direction = 'vertical';
     
-    e.target.classList.add('drag-over');
-    
+    //Add drag-over class to squares that ship is hovering over    
     const coordinate = stringToArray(e.target.dataset.pos);
-    
     const playerSquareNodeList = document.querySelectorAll('.player-container .square');
 
     for (let i = 0; i < shipSize; i++) {
@@ -168,13 +169,43 @@ export function dragLeave(e) {
     
 }
 
-export function drop(e, placeShipFunction) {
+export function drop(e) {
+    //create node of square from grid
     const playerSquareNodeList = document.querySelectorAll('.player-container .square');
+
+    //Remove dropzone styling from squares
     playerSquareNodeList.forEach(square => {
         square.classList.remove('drag-over')
     })
 
+    //grab ship info
+    const shipInfo = JSON.parse(e.dataTransfer.getData('text/plain'));
+    const shipSize = shipInfo.size
+    const direction = shipInfo.direction
+    const startCoordinate = arrayToString(e.target.dataset.pos)
+
+    //use ship size to identify endCoordinate
+    let targetCoordinate;
+    //TODO - prevent player from drop on invalid zone
+    if (direction === 'horizontal') {
+        targetCoordinate = [startCoordinate[0] + shipSize, startCoordinate[1]];
+    } else if (direction === 'vertical') {
+        targetCoordinate = [startCoordinate[0], startCoordinate[1] + shipSize];
+    }
+    console.log("🚀 ~ drop ~ targetCoordinate:", targetCoordinate)
+    //convert coordinate to string to find the matching square
+    const targetCoordinateString = arrayToString(targetCoordinate);
+    let endCoordinate = Array.from(playerSquareNodeList).find(
+        square => square.dataset.pos === targetCoordinateString
+    );
+    
+
+
+    //create ship and add it to the board
+    // const newShip = new Ship(shipInfo.size)
+    // placeShip(newShip, )
+
     // display the draggable element
 
-    //TODO Apply hide classe here
+    //TODO Apply hide classes here
 }

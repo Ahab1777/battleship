@@ -5,5 +5,8 @@
         "markdown": false,
         "scminput": false
     },
-    "liveServer.settings.port": 5501
+    "liveServer.settings.port": 5501,
+    "cSpell.words": [
+        "gameboard"
+    ]
 }
