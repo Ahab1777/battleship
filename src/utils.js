@@ -67,13 +67,21 @@ export function dragStart(e){
     squaresWithin.forEach(square => {
         square.classList.add('dragging')
     })
-
+    
     //add class to the whole ship being dragged so we can target it elsewhere
     dockedShip.classList.add('dragging-ship')
     
+    //center dragging object on mouse
+    const dragImage = e.currentTarget.cloneNode(true);
+    dragImage.style.opacity = '0.5';
+    document.body.appendChild(dragImage);
+    const rect = e.target.getBoundingClientRect();
+    const offsetX = rect.width / 2;  // Center horizontally
+    const offsetY = 20; // Center vertically (20px is half of each square)
+    e.dataTransfer.setDragImage(dragImage, offsetX, offsetY)
 
 
-    //const direction = e.target.dataset.direction || 'vertical'; // Default to vertical if not provided
+    // const direction = e.target.dataset.direction || 'vertical'; // Default to vertical if not provided
     // const shipLength = e.target.dataset.size;
     // e.dataTransfer.setData('text/plain', JSON.stringify({
     //     direction: direction,
