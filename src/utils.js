@@ -59,20 +59,20 @@ export function arrayToString(array){
 
 export function dragStart(e){
     console.log('drag starts...');
-
-    //grab squares within the draggable div
-    const shipElement = e.currentTarget;
-    const squaresWithin = Array.from(shipElement.parentNode.children)
-    console.log(squaresWithin)
+    
+    //grab squares within the docked ship
+    const dockedShip = e.currentTarget;
+    const squaresWithin = Array.from(dockedShip.children)
     //apply styling to them
     squaresWithin.forEach(square => {
         square.classList.add('dragging')
-        console.log(square.classList)
     })
 
+    //add class to the whole ship being dragged so we can target it elsewhere
+    dockedShip.classList.add('dragging-ship')
+    
 
-    e.target.classList.add('dragging')
-    console.log(e.target.classList)
+
     //const direction = e.target.dataset.direction || 'vertical'; // Default to vertical if not provided
     // const shipLength = e.target.dataset.size;
     // e.dataTransfer.setData('text/plain', JSON.stringify({
@@ -86,13 +86,25 @@ export function dragStart(e){
 }
 
 export function dragEnd(e){
-    console.log('dragEnd')
-    //use event delegation to target the clicked square
-    //select all sibling of the square clicked
+    console.log('dragEnds...')
+
+
+    //grab squares within the docked ship
+    const dockedShip = e.currentTarget;
+    const squaresWithin = Array.from(dockedShip.children)
+    //apply styling to them
+    squaresWithin.forEach(square => {
+        square.classList.remove('dragging')
+    })
+
+    //remove dragging class from boat
+    dockedShip.classList.remove('dragging-ship')
+
     //add/remove effect to the selected squares    
 }
 
 export function dragEnter(e) {
+    console.log('dragEnters...')
     e.preventDefault();
     e.target.classList.add('drag-over');
 
@@ -101,22 +113,29 @@ export function dragEnter(e) {
 
 export function dragOver(e) {
     e.preventDefault();
-    console.log('drag')
+    //select element being dragged
+    const shipBeingDragged = document.querySelector('.dragging-ship')
+    const squareOver = e.target
+
+    //Grab the size of the ship bring dragged
+    const shipSize = parseInt(shipBeingDragged.dataset.size, 10); // Converts to a number
+
+    //DORMANT CODE
     // Get all data from text/plain
-    const dragData = JSON.parse(e.dataTransfer.getData('text/plain'));
-    const numberOfSquaresToBeRendered = parseInt(dragData.shipLength, 10);
-    const direction = dragData.direction;
+    const direction = 'vertical';
     
     e.target.classList.add('drag-over');
+    
     const coordinate = stringToArray(e.target.dataset.pos);
+    
     const playerSquareNodeList = document.querySelectorAll('.player-container .square');
 
-    for (let i = 0; i < numberOfSquaresToBeRendered; i++) {
+    for (let i = 0; i < shipSize; i++) {
         let targetCoordinate;
         
-        if (direction === 'vertical') {
+        if (direction === 'horizontal') {
             targetCoordinate = [coordinate[0] + i, coordinate[1]];
-        } else if (direction === 'horizontal') {
+        } else if (direction === 'vertical') {
             targetCoordinate = [coordinate[0], coordinate[1] + i];
         }
 
@@ -132,18 +151,22 @@ export function dragOver(e) {
 }
 
 export function dragLeave(e) {
-    e.target.classList.remove('drag-over');
+    console.log('dragLeave...')
+    const playerSquareNodeList = document.querySelectorAll('.player-container .square');
+    playerSquareNodeList.forEach(square => {
+        square.classList.remove('drag-over')
+    })
+
+    
 }
 
 export function drop(e, placeShipFunction) {
-    e.target.classList.remove('drag-over');
-
-    // get the draggable element
-    const id = e.dataTransfer.getData('text/plain');
-    const draggable = document.getElementById(id);
-    // add it to the drop target
-    e.target.appendChild(draggable);
+    const playerSquareNodeList = document.querySelectorAll('.player-container .square');
+    playerSquareNodeList.forEach(square => {
+        square.classList.remove('drag-over')
+    })
 
     // display the draggable element
-    draggable.classList.remove('hide');
+
+    //TODO Apply hide classe here
 }

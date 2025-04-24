@@ -97,11 +97,13 @@ fleet.forEach((dock, index) => {
 });
 
 
+
+
 //Make player's board a drop-zone
 const playerSquareNodeList = document.querySelectorAll(`.player-container .square`)
 playerSquareNodeList.forEach(square => {
-    // square.addEventListener('dragenter', dragEnter)
-    // square.addEventListener('dragover', dragOver);
-    // square.addEventListener('dragleave', dragLeave);
-    // square.addEventListener('drop', drop);
+    square.addEventListener('dragenter', dragEnter)
+    square.addEventListener('dragover', dragOver);
+    square.addEventListener('dragleave', dragLeave);
+    square.addEventListener('drop', drop);
 })

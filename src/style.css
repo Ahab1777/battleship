@@ -193,8 +193,7 @@ button:focus-visible {
 }
 
 .dragging {
-    opacity: 0.1;
-    border-width: 30px;
+    opacity: 0.5;
 }
 
 .docked-ship {
