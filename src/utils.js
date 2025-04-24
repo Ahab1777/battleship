@@ -59,17 +59,37 @@ export function arrayToString(array){
 
 export function dragStart(e){
     console.log('drag starts...');
-    const direction = e.target.dataset.direction || 'vertical'; // Default to vertical if not provided
-    const shipLength = e.target.dataset.size;
 
-    e.dataTransfer.setData('text/plain', JSON.stringify({
-        direction: direction,
-        shipLength: shipLength
-    }))
+    //grab squares within the draggable div
+    const shipElement = e.currentTarget;
+    const squaresWithin = Array.from(shipElement.parentNode.children)
+    console.log(squaresWithin)
+    //apply styling to them
+    squaresWithin.forEach(square => {
+        square.classList.add('dragging')
+        console.log(square.classList)
+    })
+
+
+    e.target.classList.add('dragging')
+    console.log(e.target.classList)
+    //const direction = e.target.dataset.direction || 'vertical'; // Default to vertical if not provided
+    // const shipLength = e.target.dataset.size;
+    // e.dataTransfer.setData('text/plain', JSON.stringify({
+    //     direction: direction,
+    //     shipLength: shipLength
+    // }))
     
-    setTimeout(() => {
-        e.target.classList.add('hide');
-    }, 0);
+    // setTimeout(() => {
+    //     e.target.classList.add('hide');
+    // }, 0);
+}
+
+export function dragEnd(e){
+    console.log('dragEnd')
+    //use event delegation to target the clicked square
+    //select all sibling of the square clicked
+    //add/remove effect to the selected squares    
 }
 
 export function dragEnter(e) {
@@ -81,7 +101,7 @@ export function dragEnter(e) {
 
 export function dragOver(e) {
     e.preventDefault();
-    
+    console.log('drag')
     // Get all data from text/plain
     const dragData = JSON.parse(e.dataTransfer.getData('text/plain'));
     const numberOfSquaresToBeRendered = parseInt(dragData.shipLength, 10);

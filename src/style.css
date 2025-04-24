@@ -191,3 +191,14 @@ button:focus-visible {
 .hide {
     display: none;
 }
+
+.dragging {
+    opacity: 0.1;
+    border-width: 30px;
+}
+
+.docked-ship {
+    width: fit-content;
+    height: fit-content;
+
+}

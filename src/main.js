@@ -2,7 +2,7 @@ import Player from "./player.js";
 import Gameboard, { Square } from "./gameboard.js";
 import Game from "./game.js";
 import { renderGrid, resetDOM } from "./dom-manager.js";
-import { dragStart, dragEnter, dragOver, dragLeave, drop } from "./utils.js";
+import { dragStart, dragEnter, dragOver, dragLeave, drop, dragEnd } from "./utils.js";
 
 
 const standardFleet = [
@@ -84,25 +84,24 @@ newGameBtn.addEventListener("click", () => {
 const fleet = document.querySelectorAll(".docked-ship");
 fleet.forEach((dock, index) => {
     const shipSize = standardFleet[index].size
-    const ship = document.createElement("div");
-    ship.setAttribute('draggable', 'true')
-    ship.dataset.size = shipSize
-    ship.id = standardFleet[index].type
-    ship.addEventListener('dragstart', dragStart)
+    dock.setAttribute('draggable', 'true')
+    dock.dataset.size = shipSize
+    dock.id = standardFleet[index].type
+    dock.addEventListener('dragstart', dragStart)
+    dock.addEventListener('dragend', dragEnd)
     for (let i = 0; i < shipSize; i++) {
         const squareElement = document.createElement("div");
         squareElement.classList.add("square", 'ship');
-        ship.appendChild(squareElement);
+        dock.appendChild(squareElement);
     }
-    dock.appendChild(ship);
 });
 
 
 //Make player's board a drop-zone
 const playerSquareNodeList = document.querySelectorAll(`.player-container .square`)
 playerSquareNodeList.forEach(square => {
-    square.addEventListener('dragenter', dragEnter)
-    square.addEventListener('dragover', dragOver);
-    square.addEventListener('dragleave', dragLeave);
-    square.addEventListener('drop', drop);
+    // square.addEventListener('dragenter', dragEnter)
+    // square.addEventListener('dragover', dragOver);
+    // square.addEventListener('dragleave', dragLeave);
+    // square.addEventListener('drop', drop);
 })
