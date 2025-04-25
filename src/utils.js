@@ -134,17 +134,37 @@ export function dragOver(e) {
     const direction = 'vertical';
     
     //Add drag-over class to squares that ship is hovering over    
-    const coordinate = stringToArray(e.target.dataset.pos);
+    const [coordX, coordY] = stringToArray(e.target.dataset.pos);
     const playerSquareNodeList = document.querySelectorAll('.player-container .square');
 
+    //check if last square is  out of bounds
+    let targetCoordinate;
+    let newCoord;
+    let outOfBounds = false;
+    switch (direction) {
+        case 'horizontal':
+            newCoord = coordX + shipSize
+            if (newCoord < 0 || newCoord > 10){
+                outOfBounds = true
+            }
+            break;
+        case 'vertical':
+            newCoord = coordY + shipSize
+            if (newCoord < 0 || newCoord > 10){
+                outOfBounds = true
+            }
+            break;
+        default:
+            throw new Error('No valid valid direction provided')
+
+    }
+
+    //If within bounds, add adequate styling
     for (let i = 0; i < shipSize; i++) {
-        let targetCoordinate;
-        let outOfBounds = false;
-        
         if (direction === 'horizontal') {
-            targetCoordinate = [coordinate[0] + i, coordinate[1]];
+            targetCoordinate = [coordX + i, coordY];
         } else if (direction === 'vertical') {
-            targetCoordinate = [coordinate[0], coordinate[1] + i];
+            targetCoordinate = [coordX, (coordY + i)];
         }
 
         const targetCoordinateString = arrayToString(targetCoordinate);
@@ -152,13 +172,13 @@ export function dragOver(e) {
             square => square.dataset.pos === targetCoordinateString
         );
 
+        const squareStyle = outOfBounds ? 'invalid-zone' : 'drag-over'
 
-        const statusClass = outOfBounds ? 'invalid-zone' : 'drag-over'
-        
         if (targetSquare) {
-            targetSquare.classList.add(statusClass);
+            targetSquare.classList.add(squareStyle);
         }
     }
+   
 
     //Check for invalid positioning(hovering out of bounds)
     //check if the sum of ship size plus current square is out of bounds
