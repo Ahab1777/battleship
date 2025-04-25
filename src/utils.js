@@ -156,7 +156,6 @@ export function dragOver(e) {
             break;
         default:
             throw new Error('No valid valid direction provided')
-
     }
 
     //If within bounds, add adequate styling
@@ -178,12 +177,6 @@ export function dragOver(e) {
             targetSquare.classList.add(squareStyle);
         }
     }
-   
-
-    //Check for invalid positioning(hovering out of bounds)
-    //check if the sum of ship size plus current square is out of bounds
-
-
 
 }
 
@@ -200,20 +193,26 @@ export function dragLeave(e) {
 }
 
 export function drop(e, placeShipFunction) {
+    console.log('drop...')
+    e.preventDefault()
     //create node of square from grid
     const playerSquareNodeList = document.querySelectorAll('.player-container .square');
-
+    
+    
+    
+    
     //Remove dropzone styling from squares
     playerSquareNodeList.forEach(square => {
         square.classList.remove('drag-over')
+        square.classList.remove('invalid-zone')
     })
-
+    
     //grab ship info
     const shipInfo = JSON.parse(e.dataTransfer.getData('text/plain'));
     const shipSize = parseInt(shipInfo.shipLength, 10);
     const direction = shipInfo.direction
     let startCoordinate = stringToArray(e.target.dataset.pos)
-
+    
     //use ship size to identify endCoordinate
     let targetCoordinate;
     //TODO - prevent player from drop on invalid zone
@@ -222,6 +221,28 @@ export function drop(e, placeShipFunction) {
     } else if (direction === 'vertical') {
         targetCoordinate = [startCoordinate[0], (startCoordinate[1] + shipSize) - 1];
     }
+    
+    //Check if last square is within bounds, if not, cancel drop
+    switch (direction) {
+        case 'horizontal':
+            const coordX = (startCoordinate[0] + shipSize) - 1
+            if (coordX < 0 || coordX > 9) {
+                return
+            }
+            break;
+        case 'vertical':
+            const coordY = (startCoordinate[1] + shipSize) - 1
+            if (coordY < 0 || coordY > 9) {
+                return
+            }
+            break;
+        default:
+            throw new Error('No valid valid direction provided')
+    }
+
+
+
+    
     //convert coordinate to string to find the matching square
     const endCoordinate = arrayToString(targetCoordinate);
 
