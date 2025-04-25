@@ -180,19 +180,18 @@ export function drop(e) {
 
     //grab ship info
     const shipInfo = JSON.parse(e.dataTransfer.getData('text/plain'));
-    const shipSize = shipInfo.size
+    const shipSize = parseInt(shipInfo.shipLength, 10);
     const direction = shipInfo.direction
-    const startCoordinate = arrayToString(e.target.dataset.pos)
+    const startCoordinate = stringToArray(e.target.dataset.pos)
 
     //use ship size to identify endCoordinate
     let targetCoordinate;
     //TODO - prevent player from drop on invalid zone
     if (direction === 'horizontal') {
-        targetCoordinate = [startCoordinate[0] + shipSize, startCoordinate[1]];
+        targetCoordinate = [(startCoordinate[0] + shipSize) - 1, startCoordinate[1]];
     } else if (direction === 'vertical') {
-        targetCoordinate = [startCoordinate[0], startCoordinate[1] + shipSize];
+        targetCoordinate = [startCoordinate[0], (startCoordinate[1] + shipSize) - 1];
     }
-    console.log("🚀 ~ drop ~ targetCoordinate:", targetCoordinate)
     //convert coordinate to string to find the matching square
     const targetCoordinateString = arrayToString(targetCoordinate);
     let endCoordinate = Array.from(playerSquareNodeList).find(
