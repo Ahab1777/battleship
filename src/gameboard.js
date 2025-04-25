@@ -61,7 +61,6 @@ export default class Gameboard{
     }
     
     placeShip(ship, startCoordinate, endCoordinate){
-        console.log("🚀 ~ Gameboard ~ placeShip ~ startCoordinate:", startCoordinate)
         const size = ship.shipSize;
         const startPosition = stringToArray(startCoordinate)
         const endPosition = stringToArray(endCoordinate)

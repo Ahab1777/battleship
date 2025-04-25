@@ -212,6 +212,8 @@ export function drop(e, placeShipFunction) {
     const shipSize = parseInt(shipInfo.shipLength, 10);
     const direction = shipInfo.direction
     let startCoordinate = stringToArray(e.target.dataset.pos)
+
+
     
     //use ship size to identify endCoordinate
     let targetCoordinate;
@@ -240,6 +242,8 @@ export function drop(e, placeShipFunction) {
             throw new Error('No valid valid direction provided')
     }
 
+    //Toggle 'docked' data-set info for correct display
+    const shipElement = document.querySelector(`#${shipInfo.id}`)
 
 
     
@@ -252,4 +256,14 @@ export function drop(e, placeShipFunction) {
     //feed placeShip function
     placeShipFunction(newShip, startCoordinate, endCoordinate)
 
+}
+
+
+export function flipShips(){
+    console.log('ships flipped...')
+    //Create node of all docked ships
+    const dockedShips = document.querySelectorAll('.docked-ship')
+    dockedShips.forEach(ship => {
+        ship.dataset.direction = ship.dataset.direction === 'vertical' ? 'horizontal' : 'vertical';
+    })
 }

@@ -5,10 +5,45 @@ import Game from "./game.js";
 
 export function renderGrid(match) {
     //TODO Enemy fleet remaining 
-    //TODO make clicked squares unclickable 
 
     const player = match.humanPlayer
     const computer = match.computerPlayer
+    
+    //render fleet(docked ships)
+    //create node of ship elements
+    const shipsNode = document.querySelectorAll('.docked-ship')
+    console.log("🚀 ~ renderGrid ~ shipsNode:", shipsNode)
+    
+    // Check ships direction for correct styling
+    shipsNode.forEach(ship => {
+
+        if (ship.dataset.direction === 'vertical') {
+            console.log("🚀 ~ renderGrid ~ ship.direction:", ship.dataset.direction)
+            ship.classList.remove('horizontal')
+            ship.classList.add('vertical')
+        }
+        else if (ship.dataset.direction === 'horizontal') {
+            console.log("🚀 ~ renderGrid ~ ship.direction:", ship.dataset.direction)
+            ship.classList.remove('vertical')
+            ship.classList.add('horizontal')
+        } 
+        //render each square after emptying the old squares
+        const shipSize = ship.dataset.size
+        ship.innerHTML = '';
+        for (let i = 0; i < shipSize; i++) {
+            const squareElement = document.createElement("div");
+            squareElement.classList.add('square', 'ship');
+            ship.appendChild(squareElement);
+        }
+    })
+    console.log('triggered')
+    //empty docks and refill with remaining docked ships
+    const fleetContainer = document.querySelector('.fleet')
+    fleetContainer.innerHTML = '';
+    shipsNode.forEach(ship => {
+        fleetContainer.appendChild(ship)
+    })
+
 
     //render board - player
     const playerSquareNodeList = document.querySelectorAll(`.${player.name}-container .square`);

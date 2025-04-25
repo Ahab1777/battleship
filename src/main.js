@@ -2,7 +2,7 @@ import Player from "./player.js";
 import Gameboard, { Square } from "./gameboard.js";
 import Game from "./game.js";
 import { renderGrid, resetDOM } from "./dom-manager.js";
-import { dragStart, dragEnter, dragOver, dragLeave, drop, dragEnd } from "./utils.js";
+import { dragStart, dragEnter, dragOver, dragLeave, drop, dragEnd, flipShips } from "./utils.js";
 
 
 const standardFleet = [
@@ -36,7 +36,29 @@ newGameBtn.addEventListener("click", () => {
   let computer = new Player("computer");
   let match = new Game(player, computer);
   match.positionShips(standardFleet);
+
+  //Generate fleet for custom positioning
+  const fleet = document.querySelectorAll(".docked-ship");
+  fleet.forEach((dock, index) => {
+      const shipSize = standardFleet[index].size
+      dock.setAttribute('draggable', 'true')
+      dock.classList.add('vertical')
+      dock.dataset.size = shipSize
+      dock.dataset.docked = true
+      dock.dataset.direction = 'vertical'
+      dock.id = standardFleet[index].type
+      dock.addEventListener('dragstart', dragStart)
+      dock.addEventListener('dragend', dragEnd)
+      // for (let i = 0; i < shipSize; i++) {
+      //     const squareElement = document.createElement("div");
+      //     squareElement.classList.add("square", 'ship');
+      //     dock.appendChild(squareElement);
+      // }
+  });
+  
   renderGrid(match);
+
+
 
   //Click to attack
   const computerSquareNodeList = document.querySelectorAll(
@@ -79,22 +101,14 @@ newGameBtn.addEventListener("click", () => {
     });
   });
 
-
-  //Generate fleet for custom positioning
-  const fleet = document.querySelectorAll(".docked-ship");
-  fleet.forEach((dock, index) => {
-      const shipSize = standardFleet[index].size
-      dock.setAttribute('draggable', 'true')
-      dock.dataset.size = shipSize
-      dock.id = standardFleet[index].type
-      dock.addEventListener('dragstart', dragStart)
-      dock.addEventListener('dragend', dragEnd)
-      for (let i = 0; i < shipSize; i++) {
-          const squareElement = document.createElement("div");
-          squareElement.classList.add("square", 'ship');
-          dock.appendChild(squareElement);
-      }
+  //Flip ships
+  const flipBtn = document.querySelector('.flip-btn');
+  flipBtn.addEventListener('click', () => {
+    flipShips()
+    renderGrid(match)
   });
+
+  
 
   //Make player's board a drop-zone
   const playerSquareNodeList = document.querySelectorAll(`.player-container .square`)

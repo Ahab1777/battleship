@@ -16,12 +16,12 @@
 
 .game-display {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr, 1fr;
 }
 
 .game-status {
-    grid-area: 1 / 1 / 2 / 3;
+    grid-area: 1 / 1 / 2 / 4;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -29,12 +29,14 @@
     color: white;
 }
 
-.new-game-btn-container, .random-positions-btn-container {
+.new-game-btn-container, .random-positions-btn-container, .flip-btn-container {
     grid-template-columns:auto;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
+
 
 button{
     background-color: darkblue;
@@ -77,6 +79,25 @@ button:focus-visible {
     gap: 10px;
     justify-content: center;
 }
+
+/* Docked ships */
+.docked-ship {
+    width: fit-content;
+    height: fit-content;
+    display:flex;
+}
+
+.horizontal {
+    flex-direction: row;
+}
+
+.vertical {
+    flex-direction: column;
+}
+
+
+
+
 
 /* Battle grid */
 
@@ -200,8 +221,3 @@ button:focus-visible {
     opacity: 0.5;
 }
 
-.docked-ship {
-    width: fit-content;
-    height: fit-content;
-
-}
