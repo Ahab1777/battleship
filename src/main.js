@@ -28,17 +28,13 @@ const standardFleet = [
   },
 ];
 
-let player;
-let computer;
-let match;
-
 const newGameBtn = document.querySelector(".new-game");
 newGameBtn.addEventListener("click", () => {
   console.log("clicked");
   resetDOM();
-  player = new Player("player");
-  computer = new Player("computer");
-  match = new Game(player, computer);
+  let player = new Player("player");
+  let computer = new Player("computer");
+  let match = new Game(player, computer);
   match.positionShips(standardFleet);
   renderGrid(match);
 
@@ -82,35 +78,42 @@ newGameBtn.addEventListener("click", () => {
       }, 500); // 500ms delay
     });
   });
+
+
+  //Generate fleet for custom positioning
+  const fleet = document.querySelectorAll(".docked-ship");
+  fleet.forEach((dock, index) => {
+      const shipSize = standardFleet[index].size
+      dock.setAttribute('draggable', 'true')
+      dock.dataset.size = shipSize
+      dock.id = standardFleet[index].type
+      dock.addEventListener('dragstart', dragStart)
+      dock.addEventListener('dragend', dragEnd)
+      for (let i = 0; i < shipSize; i++) {
+          const squareElement = document.createElement("div");
+          squareElement.classList.add("square", 'ship');
+          dock.appendChild(squareElement);
+      }
+  });
+
+  //Make player's board a drop-zone
+  const playerSquareNodeList = document.querySelectorAll(`.player-container .square`)
+  playerSquareNodeList.forEach(square => {
+      square.addEventListener('dragenter', dragEnter)
+      square.addEventListener('dragover', dragOver);
+      square.addEventListener('dragleave', (e) => {
+        dragLeave(e)
+        renderGrid(match)
+      });
+      square.addEventListener('drop', (e) => {
+        drop(e, player.gameboard.placeShip.bind(player.gameboard));
+        renderGrid(match)
+      });
+  })
+
+
 });
 
-//Generate fleet for custom positioning
-const fleet = document.querySelectorAll(".docked-ship");
-fleet.forEach((dock, index) => {
-    const shipSize = standardFleet[index].size
-    dock.setAttribute('draggable', 'true')
-    dock.dataset.size = shipSize
-    dock.id = standardFleet[index].type
-    dock.addEventListener('dragstart', dragStart)
-    dock.addEventListener('dragend', dragEnd)
-    for (let i = 0; i < shipSize; i++) {
-        const squareElement = document.createElement("div");
-        squareElement.classList.add("square", 'ship');
-        dock.appendChild(squareElement);
-    }
-});
 
 
 
-
-//Make player's board a drop-zone
-const playerSquareNodeList = document.querySelectorAll(`.player-container .square`)
-playerSquareNodeList.forEach(square => {
-    square.addEventListener('dragenter', dragEnter)
-    square.addEventListener('dragover', dragOver);
-    square.addEventListener('dragleave', dragLeave);
-    square.addEventListener('drop', (e) => {
-      //const playerGameboard = match.humanPlayer.gameboard;
-      drop(e)
-    });
-})

@@ -29,67 +29,68 @@ export default class Game{
         // this.humanPlayer.gameboard.placeShip(new Ship(3), 'A1', 'C1')
         // this.computerPlayer.gameboard.placeShip(new Ship(3), 'A1', 'C1')
 
+        //TODO - permit the player to choose positioning randomly
         //Positioning player ships - random
-        standardFleet.forEach((battleship) => {
-            let randomStartingPosition;
-            let randomEndingPosition;
+        // standardFleet.forEach((battleship) => {
+        //     let randomStartingPosition;
+        //     let randomEndingPosition;
             
-            let attempts = 0; //testing
-            const maxAttempts = 1000;   //testing 
-            let isOverlap = false;
-            let isOutOfBounds = false;
-            do {
-                randomStartingPosition = this.randomCoordinate();
-                randomEndingPosition = this.randomCoordinate(battleship.size, randomStartingPosition);
+        //     let attempts = 0; //testing
+        //     const maxAttempts = 1000;   //testing 
+        //     let isOverlap = false;
+        //     let isOutOfBounds = false;
+        //     do {
+        //         randomStartingPosition = this.randomCoordinate();
+        //         randomEndingPosition = this.randomCoordinate(battleship.size, randomStartingPosition);
 
-                const [startRow, startCol] = stringToArray(randomStartingPosition)
-                const [endRow, endCol] = stringToArray(randomEndingPosition)
+        //         const [startRow, startCol] = stringToArray(randomStartingPosition)
+        //         const [endRow, endCol] = stringToArray(randomEndingPosition)
 
-                //Check position of ship
-                    //Iterate over each square in ships direction to check if another ship is present
-                isOverlap = false; //reset reference
-                isOutOfBounds = false // reset reference
-                if (startRow === endRow) { //ship is horizontal
-                    for (let index = 0; index < battleship.size; index++) {
-                        let currentCoordinate = arrayToString([startRow, startCol + index])
-                        if (checkIfStringOutOfBounds(currentCoordinate)) {
-                            isOutOfBounds = true
-                            continue
-                        }
-                        if(this.humanPlayer.gameboard.getSquareShip(currentCoordinate)){
-                            isOverlap = true;
-                        }
-                    }
-                }
-                else if (startCol === endCol){ //ship is vertical
-                    for (let index = 0; index < battleship.size; index++) {
-                        let currentCoordinate = arrayToString([startRow + index, startCol])
-                        if (checkIfStringOutOfBounds(currentCoordinate)) {
-                            isOutOfBounds = true
-                            continue
-                        }
-                        //console.log(`startCol ${startCol} // endCol ${endCol} // Current coordinate ${currentCoordinate}`)
+        //         //Check position of ship
+        //             //Iterate over each square in ships direction to check if another ship is present
+        //         isOverlap = false; //reset reference
+        //         isOutOfBounds = false // reset reference
+        //         if (startRow === endRow) { //ship is horizontal
+        //             for (let index = 0; index < battleship.size; index++) {
+        //                 let currentCoordinate = arrayToString([startRow, startCol + index])
+        //                 if (checkIfStringOutOfBounds(currentCoordinate)) {
+        //                     isOutOfBounds = true
+        //                     continue
+        //                 }
+        //                 if(this.humanPlayer.gameboard.getSquareShip(currentCoordinate)){
+        //                     isOverlap = true;
+        //                 }
+        //             }
+        //         }
+        //         else if (startCol === endCol){ //ship is vertical
+        //             for (let index = 0; index < battleship.size; index++) {
+        //                 let currentCoordinate = arrayToString([startRow + index, startCol])
+        //                 if (checkIfStringOutOfBounds(currentCoordinate)) {
+        //                     isOutOfBounds = true
+        //                     continue
+        //                 }
+        //                 //console.log(`startCol ${startCol} // endCol ${endCol} // Current coordinate ${currentCoordinate}`)
                         
-                        if(this.humanPlayer.gameboard.getSquareShip(currentCoordinate)){
-                            isOverlap = true;
-                        }
-                    }
-                }
+        //                 if(this.humanPlayer.gameboard.getSquareShip(currentCoordinate)){
+        //                     isOverlap = true;
+        //                 }
+        //             }
+        //         }
 
 
 
-                attempts++;
-                if (attempts > maxAttempts) {
-                    throw new Error("Unable to find valid positions for players's ship placement.");
-                }
-            } while (
-                isOverlap ||
-                isOutOfBounds ||
-                randomStartingPosition === randomEndingPosition
-            );
+        //         attempts++;
+        //         if (attempts > maxAttempts) {
+        //             throw new Error("Unable to find valid positions for players's ship placement.");
+        //         }
+        //     } while (
+        //         isOverlap ||
+        //         isOutOfBounds ||
+        //         randomStartingPosition === randomEndingPosition
+        //     );
                 
-            this.humanPlayer.gameboard.placeShip(new Ship(battleship.size), randomStartingPosition, randomEndingPosition)
-        })
+        //     this.humanPlayer.gameboard.placeShip(new Ship(battleship.size), randomStartingPosition, randomEndingPosition)
+        // })
 
         //Positioning computer ships - random
         standardFleet.forEach((battleship) => {

@@ -178,6 +178,10 @@ button:focus-visible {
     background-color: darkgreen;
 }
 
+.invalid-zone{
+    background-color: grey;
+}
+
 .square:not(.miss):not(.hit):not(.sunk):hover {
     cursor: pointer;
 }
@@ -185,7 +189,7 @@ button:focus-visible {
 /* Drag and Drop */
 
 .drag-over {
-    border: dashed 3px red;
+    border: dashed 3px blue;
 }
 
 .hide {
